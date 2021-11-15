@@ -27,7 +27,7 @@ async function testBirthday(){
         if (result == "Lemme guess, your age is..."){
             // console.log(result);
             points = points + 1;
-            console.log("Age click prompt works")
+            console.log("Age click prompt : correct")
             console.log(points);
             // printPoints(points);
         }
@@ -49,7 +49,7 @@ async function testBirthday(){
     value = driver.findElement(By.id("ageOutput")).getText();
     value.then(function(result){
         if (result == "Would you mind entering your birthday?"){
-            console.log("Request age when input is empty : works")
+            console.log("Request age when input is empty : correct")
             points = points + 1;
             console.log(points);
             // printPoints(points);
@@ -75,7 +75,7 @@ async function testBirthday(){
     value.then(function(result){
         if (result == "Your age is 20 years old!"){
             // console.log(result);
-            console.log("Age display works")
+            console.log("Age display : correct")
             points = points + 1;
             console.log(points);
             // printPoints(points);
@@ -108,7 +108,7 @@ async function testName(){
     let value = driver.findElement(By.id("nameOutput")).getText();
     value.then(function(result){
         if (result == "Hello there! What is your name?"){
-            console.log("Name click prompt : works")
+            console.log("Name click prompt : correct")
             points = points + 1;
             console.log(points);
             // printPoints(points);
@@ -132,7 +132,7 @@ async function testName(){
     value.then(function(result){
         if (result == "Would you mind entering your name?"){
             // console.log(result);
-            console.log("Ask for name when input is empty : works")
+            console.log("Ask for name when input is empty : correct")
             points = points + 1;
             console.log(points);
             // printPoints(points);
@@ -157,7 +157,7 @@ async function testName(){
     value = driver.findElement(By.id("nameOutput")).getText();
     value.then(function(result){
         if (result == "Hi, TestName!"){
-            console.log("Name display works")
+            console.log("Name display : correct")
             points = points + 1;
             console.log(points);
             // printPoints(points);
@@ -215,8 +215,6 @@ async function testTheme(){
         
     })
     
-
-
     // test click to light mode
     await driver.findElement(By.id("light")).click();
 
@@ -247,15 +245,98 @@ async function testTheme(){
         }
         
     })
-
     
+}
+
+async function hover(id){
+    // to remove cluttering
+    const chromeOptions = new ChromeOptions();
+    chromeOptions.excludeSwitches('enable-logging');
+
+    // open html
+    let driver = await new webdriver.Builder()
+        .forBrowser("chrome")
+        .setChromeOptions(chromeOptions)
+        .build();
+    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
+
+    // testing hover
+
+    // pre
+    let preHover = await driver.findElement(By.id(id)).getCssValue("background-color");
+    // console.log(preHover)
+
+
+    let html = driver.findElement(By.id(id));
+    const actions = driver.actions({ bridge: true });
+    actions.move({duration: 100, origin: html}).perform();
+
+    // post
+    let postHover = await driver.findElement(By.id(id)).getCssValue("background-color");
+    // console.log(postHover)
+
+    // move mouse away
+    let right = driver.findElement(By.id("right"));
+    actions.move({duration: 100, origin: right}).perform();
+
+    let postHoverTwo = await driver.findElement(By.id(id)).getCssValue("background-color");
+
+    // check if colours change correctly
+    if (preHover == postHoverTwo && postHover == "rgba(200, 35, 51, 1)"){
+        // points = points + 1
+        // console.log("Colour change on hover : works")
+        // console.log(points)
+        return true
+    }
+}
+
+
+
+
+
+
+async function testSkills(){
+    // to remove cluttering
+    const chromeOptions = new ChromeOptions();
+    chromeOptions.excludeSwitches('enable-logging');
+
+    // open html
+    let driver = await new webdriver.Builder()
+        .forBrowser("chrome")
+        .setChromeOptions(chromeOptions)
+        .build();
+    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
+
+    // testing hover
+    if (hover("html") && hover("css") && hover("javascript")){
+        points = points + 1;
+        console.log("Colour change on skill buttons hover : correct")
+        console.log(points);
+    }
+    else{
+        console.log("Check colour changes on skill button hover")
+    }
+
+
+
+}
+
+
+
+
+function later(delay) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, delay);
+    });
 }
 
 async function main(){
     await testBirthday();
     await testName();
-    testTheme();
-    // console.log(points);
+    await testTheme();
+    testSkills();
+    // await later(10);
+    // console.log("final: " + points);
 }
 
 
