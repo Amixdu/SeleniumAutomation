@@ -149,7 +149,5 @@ async function testName(){
 
 
 
-
-// testHtmlOpen();
-// testBirthday();
+testBirthday();
 testName();
