@@ -8,7 +8,7 @@ Testing Name:<br/>
 Testing Birthday:<br/>
 1 point for displaying prompt when input box clicked<br/>
 1 point for displaying a request prompt when user clicks away when input box is empty<br/>
-1 point for displaying age when user clicks away when input box is non-empty<br/>
+1 point for displaying correct age when user clicks away when input box is non-empty<br/>
 
 Testing Theme:<br/>
 1 point for displaying message when dark mode selected<br/>
