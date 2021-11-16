@@ -51,7 +51,7 @@ async function testBirthday(){
     driver.findElement(By.id("date")).click();
 
     // blur
-    driver.findElement(By.id("right")).click();
+    driver.findElement(By.css("body")).click();
 
     // get text on input box
     let reqPrompt = await driver.findElement(By.id("ageOutput")).getText();
@@ -74,7 +74,7 @@ async function testBirthday(){
     birthdayBox.sendKeys("08142001");
 
     // blur
-    driver.findElement(By.id("right")).click();
+    driver.findElement(By.css("body")).click();
 
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
@@ -123,7 +123,7 @@ async function testName(){
     driver.findElement(By.id("name")).click();
 
     // blur
-    driver.findElement(By.id("right")).click();
+    driver.findElement(By.css("body")).click();
 
     // get text on input box
     let reqPrompt = await driver.findElement(By.id("nameOutput")).getText();
@@ -145,7 +145,7 @@ async function testName(){
     nameBox.sendKeys("TestName");
 
     // blur
-    driver.findElement(By.id("right")).click();
+    driver.findElement(By.css("body")).click();
 
     // obtain the greeting message (the output message)
     let nameOutput = await driver.findElement(By.id("nameOutput")).getText();
@@ -170,8 +170,10 @@ async function testTheme(){
     // get text before click
     let initial = driver.findElement(By.id("themeOutput")).getText();
 
-    // get theme colour before click
-    let initialColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    // get theme colour before click (parent of parent of themeOutput)
+    let theme =  await driver.findElement(By.id("themeOutput"));
+    let parent = await theme.findElement(By.xpath("./.."));
+    let initialColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
@@ -180,7 +182,7 @@ async function testTheme(){
     let message = await driver.findElement(By.id("themeOutput")).getText();
 
     // get colour after the click
-    let displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    let displayColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
     
     // check if text has the word 'Dark'
     if ((message != initial) && (message.includes("Dark"))){
@@ -207,8 +209,10 @@ async function testTheme(){
     // get text before click
     initial = driver.findElement(By.id("themeOutput")).getText();
 
-    // get theme colour before click
-    initialColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    // get theme colour before click (parent of parent of themeOutput)
+    theme =  await driver.findElement(By.id("themeOutput"));
+    parent = await theme.findElement(By.xpath("./.."));
+    initialColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
 
     // click light mode button
     await driver.findElement(By.id("light")).click();
@@ -218,7 +222,7 @@ async function testTheme(){
     message = await driver.findElement(By.id("themeOutput")).getText();
 
     // get colour after the click
-    displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    displayColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
         
     // check if text has the word 'Light'
     if ((message != initial) && (message.includes("Light"))){
@@ -231,7 +235,7 @@ async function testTheme(){
     }
    
     // test display colour when changing to light mode
-    displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    displayColour = await driver.findElement(By.id("nameOutput")).getCssValue("background-color");
 
     if (displayColour != initialColour){
         points = points + 1;
@@ -258,8 +262,9 @@ async function hover(id){
     let postHover = await driver.findElement(By.id(id)).getCssValue("background-color");
 
     // move mouse away
-    let right = driver.findElement(By.id("right"));
-    actions.move({duration: 100, origin: right}).perform();
+    // let right = driver.findElement(By.id("nameOutput"));
+    // actions.move({duration: 100, origin: right}).perform();
+    driver.findElement(By.css("body")).click();
 
     // get colour again after moving mouse
     let postHoverTwo = await driver.findElement(By.id(id)).getCssValue("background-color");
@@ -278,14 +283,13 @@ async function getRightSkills(){
     return skillsArray;
 }
 
-async function getLeftSkills(){
-    let leftSkills = await driver.findElement(By.id('left'));
-    let leftSkillsArray = await leftSkills.findElements(By.xpath(".//*"));
+async function getLeftSkills(handle){
+    let leftSkillsArray = await handle.findElements(By.xpath(".//*"));
     return leftSkillsArray;
 }
 
 
-async function move(id, leftCount, rightCount){
+async function move(id, leftCount, rightCount, handle){
     let button = await driver.findElement(By.id(id));
 
     // click button
@@ -293,7 +297,7 @@ async function move(id, leftCount, rightCount){
 
     // get skills on both sides
     let right = await getRightSkills();
-    let left = await getLeftSkills();
+    let left = await getLeftSkills(handle);
 
     // checking if button moved to right side
     let foundRight = false;
@@ -327,11 +331,11 @@ async function move(id, leftCount, rightCount){
         return true
     }
     else{
+        console.log(left.length)
+        console.log(right.length)
         return false
     }
 }
-
-
 
 
 async function testSkills(){
@@ -347,10 +351,17 @@ async function testSkills(){
     }
 
     // testing moving
-    if ((await move("html", 3, 1)) && (await move("javascript", 2, 2)) && (await move("css", 1, 3))){
+
+    // obtain left side buttons handle using html button and use this handle for tracking all three buttons on the left
+    let element =  await driver.findElement(By.id("html"));
+    let parent = await element.findElement(By.xpath("./.."));
+    if ((await move("html", 3, 1, parent)) && (await move("javascript", 2, 2, parent)) && (await move("css", 1, 3, parent))){
         points = points + 1;
         console.log("Button moving : correct");
         console.log(points)
+    }
+    else{
+        console.log("Problem")
     }
 }
 
