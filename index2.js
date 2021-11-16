@@ -90,9 +90,13 @@ async function testBirthday(){
 
 async function testName(){
     // test click
+
+    // clicking name
     await driver.findElement(By.id("name")).click();
 
     // check if correct
+
+    // obtain the value displayed on the right side
     let value = driver.findElement(By.id("nameOutput")).getText();
     value.then(function(result){
         if (result == "Hello there! What is your name?"){
@@ -255,6 +259,173 @@ async function hover(id){
     }
 }
 
+async function getRightSkills(){
+    let skills = await driver.findElement(By.id('skillsOutput'));
+    let skillsArray = await skills.findElements(By.xpath(".//*"));
+    return skillsArray;
+}
+
+async function getLeftSkills(){
+    let leftSkills = await driver.findElement(By.id('left'));
+    let leftSkillsArray = await leftSkills.findElements(By.xpath(".//*"));
+    return leftSkillsArray;
+}
+
+async function testMove(){
+    // let right = await driver.findElement(By.id("right"));
+    // let left = await driver.findElement(By.id("left"));
+
+    let html = await driver.findElement(By.id('html'));
+    
+
+    let js = await driver.findElement(By.id('javascript'));
+    let css = await driver.findElement(By.id('css'));
+
+    // check if html button moves correctly
+
+    // click button
+    await html.click();
+
+    // get skills on both sides
+    let right = await getRightSkills();
+    let left = await getLeftSkills();
+
+    // checking if button moved to right side
+    let foundRight = false;
+    for (let i = 0; i < right.length; i ++){
+        let res = await right[i].getText();
+        if (res == "HTML"){
+            foundRight = true;
+        }
+    }
+
+    if (foundRight == false){
+        console.log("HTML button not moved to right side")
+    }
+
+    // checking if button removed from left side
+    let foundLeft = false;
+    for (let i = 0; i < left.length; i ++){
+        let res = await left[i].getText();
+        if (res == "HTML"){
+            foundLeft = true;
+        }
+    }
+
+    if (foundLeft){
+        console.log("HTML button not removed from left side")
+    }
+
+    let htmlCorrect = false;
+    if (left.length == 3 && right.length == 1 && foundRight && foundLeft == false){
+        htmlCorrect = true;
+    }
+
+    // if (htmlCorrect){
+    //     console.log("html works");
+    // }
+
+
+    // check if js button moves correctly
+
+    // click button
+    await js.click();
+
+    // get skills on both sides
+    right = await getRightSkills();
+    left = await getLeftSkills();
+
+    // checking if button moved to right side
+    foundRight = false;
+    for (let i = 0; i < right.length; i ++){
+        let res = await right[i].getText();
+        if (res == "JavaScript"){
+            foundRight = true;
+        }
+    }
+
+    if (foundRight == false){
+        console.log("JS button not moved to right side")
+    }
+
+    // checking if button removed from left side
+    foundLeft = false;
+    for (let i = 0; i < left.length; i ++){
+        let res = await left[i].getText();
+        if (res == "JavaScript"){
+            foundLeft = true;
+        }
+    }
+
+    if (foundLeft){
+        console.log("JS button not removed from left side")
+    }
+
+    let jsCorrect = false;
+    if (left.length == 2 && right.length == 2 && foundRight && foundLeft == false){
+        jsCorrect = true;
+    }
+
+    // if (jsCorrect){
+    //     console.log("js works");
+    // }
+
+
+
+
+    // check if html button moves correctly
+
+    // click button
+    await css.click();
+
+    // get skills on both sides
+    right = await getRightSkills();
+    left = await getLeftSkills();
+
+    // checking if button moved to right side
+    foundRight = false;
+    for (let i = 0; i < right.length; i ++){
+        let res = await right[i].getText();
+        if (res == "CSS"){
+            foundRight = true;
+        }
+    }
+
+    if (foundRight == false){
+        console.log("CSS button not moved to right side")
+    }
+
+    // checking if button removed from left side
+    foundLeft = false;
+    for (let i = 0; i < left.length; i ++){
+        let res = await left[i].getText();
+        if (res == "CSS"){
+            foundLeft = true;
+        }
+    }
+
+    if (foundLeft){
+        console.log("CSS button not removed from left side")
+    }
+
+    let cssCorrect = false;
+    if (left.length == 1 && right.length == 3 && foundRight && foundLeft == false){
+        cssCorrect = true;
+    }
+
+    // if (cssCorrect){
+    //     console.log("css works");
+    // }
+
+    if (htmlCorrect && jsCorrect && cssCorrect){
+        return true;
+    }
+    else{
+        return false;
+    }
+
+}
+
 
 
 
@@ -263,7 +434,7 @@ async function hover(id){
 async function testSkills(){
 
     // testing hover
-    if (hover("html") && hover("css") && hover("javascript")){
+    if (await hover("html") && await hover("css") && await hover("javascript")){
         points = points + 1;
         console.log("Colour change on skill buttons hover : correct")
         console.log(points);
@@ -272,8 +443,15 @@ async function testSkills(){
         console.log("Check colour changes on skill button hover")
     }
 
-
-
+    // testing moving
+    if (await testMove()){
+        points = points + 1;
+        console.log("Button moving : correct");
+        console.log(points)
+    }
+    else{
+        console.log("Check button moving");
+    }
 }
 
 
