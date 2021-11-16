@@ -1,7 +1,7 @@
 # SeleniumAutomation
 
 Testing Name:
-1 point for displaying prompt when input box clicked
+1 point for displaying prompt when input box clicked <br/>
 1 point for displaying a request prompt when user clicks away when input box is empty
 1 point for displaying greeting with name when user clicks away when input box is c=non-empty
 
