@@ -165,14 +165,22 @@ async function testName(){
 
 async function testTheme(){
 
+    // DARK MODE
+
     // get text before click
     let initial = driver.findElement(By.id("themeOutput")).getText();
+
+    // get theme colour before click
+    let initialColour = await driver.findElement(By.id("right")).getCssValue("background-color");
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
 
     // obtain the value displayed on the right side
     let message = await driver.findElement(By.id("themeOutput")).getText();
+
+    // get colour after the click
+    let displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
     
     // check if text has the word 'Dark'
     if ((message != initial) && (message.includes("Dark"))){
@@ -185,9 +193,7 @@ async function testTheme(){
     }
     
     // test display colour when changing to dark mode
-    let displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
-    
-    if (displayColour == "rgba(52, 58, 64, 1)"){
+    if (displayColour != initialColour){
         points = points + 1;
         console.log("Dark Mode selection : colour is correct");
         console.log(points);
@@ -196,28 +202,38 @@ async function testTheme(){
         console.log("Check colour when dark mode selected");
     }
         
+    // LIGHT MODE
     
-    // test click to light mode
+    // get text before click
+    initial = driver.findElement(By.id("themeOutput")).getText();
+
+    // get theme colour before click
+    initialColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+
+    // click light mode button
     await driver.findElement(By.id("light")).click();
 
 
-   // obtain the value displayed on the right side
-   message = await driver.findElement(By.id("themeOutput")).getText();
-    
-   // check if text has the word 'Dark'
-   if ((message != initial) && (message.includes("Light"))){
-       points = points + 1;
-       console.log("Dark Mode selection : message is correct");
-       console.log(points);
-   }
-   else{
-       console.log("Check message when dark mode selected");
-   }
-   
-   // test display colour when changing to light mode
-   displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    // obtain the value displayed on the right side
+    message = await driver.findElement(By.id("themeOutput")).getText();
 
-   if (displayColour == "rgba(248, 249, 250, 1)"){
+    // get colour after the click
+    displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+        
+    // check if text has the word 'Light'
+    if ((message != initial) && (message.includes("Light"))){
+        points = points + 1;
+        console.log("Dark Mode selection : message is correct");
+        console.log(points);
+    }
+    else{
+        console.log("Check message when dark mode selected");
+    }
+   
+    // test display colour when changing to light mode
+    displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+
+    if (displayColour != initialColour){
         points = points + 1;
         console.log("Light Mode selection : colour is correct");
         console.log(points);
@@ -230,30 +246,28 @@ async function testTheme(){
 
 async function hover(id){
 
-    // pre
+    // pre hover colour
     let preHover = await driver.findElement(By.id(id)).getCssValue("background-color");
-    // console.log(preHover)
 
-
+    // move mouse over button
     let html = driver.findElement(By.id(id));
     const actions = driver.actions({ bridge: true });
     actions.move({duration: 100, origin: html}).perform();
 
-    // post
+    // get colour while mouse is hovering
     let postHover = await driver.findElement(By.id(id)).getCssValue("background-color");
-    // console.log(postHover)
 
     // move mouse away
     let right = driver.findElement(By.id("right"));
     actions.move({duration: 100, origin: right}).perform();
 
+    // get colour again after moving mouse
     let postHoverTwo = await driver.findElement(By.id(id)).getCssValue("background-color");
 
     // check if colours change correctly
-    if (preHover == postHoverTwo && postHover == "rgba(200, 35, 51, 1)"){
-        // points = points + 1
-        // console.log("Colour change on hover : works")
-        // console.log(points)
+    // initial colour should be different to colour when mouse is hovering
+    // colour should be same as initial colour when mouse moved away
+    if (preHover == postHoverTwo && postHover != preHover){
         return true
     }
 }
