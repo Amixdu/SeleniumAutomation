@@ -3,7 +3,7 @@
 Testing Name:<br/>
 1 point for displaying prompt when input box clicked<br/>
 1 point for displaying a request prompt when user clicks away when input box is empty<br/>
-1 point for displaying greeting with name when user clicks away when input box is c=non-empty<br/>
+1 point for displaying greeting with name when user clicks away when input box is non-empty<br/>
 
 Testing Birthday:<br/>
 1 point for displaying prompt when input box clicked<br/>
