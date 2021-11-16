@@ -166,13 +166,13 @@ async function testName(){
 async function testTheme(){
 
     // get text before click
-    let initial = driver.findElement(By.id("skillsOutput")).getText();
+    let initial = driver.findElement(By.id("themeOutput")).getText();
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
 
     // obtain the value displayed on the right side
-    let message = await driver.findElement(By.id("skillsOutput")).getText();
+    let message = await driver.findElement(By.id("themeOutput")).getText();
     
     // check if text has the word 'Dark'
     if ((message != initial) && (message.includes("Dark"))){
@@ -182,55 +182,49 @@ async function testTheme(){
     }
     else{
         console.log("Check message when dark mode selected");
-        console.log(message)
     }
     
-
-
     // test display colour when changing to dark mode
-    let displayColour = driver.findElement(By.id("right")).getCssValue("background-color");
-    displayColour.then(function(result){
-        if (result == "rgba(52, 58, 64, 1)"){
-            points = points + 1;
-            console.log("Dark Mode selection : colour is correct");
-            console.log(points);
-        }
-        else{
-            console.log("Check colour when dark mode selected");
-        }
+    let displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
+    
+    if (displayColour == "rgba(52, 58, 64, 1)"){
+        points = points + 1;
+        console.log("Dark Mode selection : colour is correct");
+        console.log(points);
+    }
+    else{
+        console.log("Check colour when dark mode selected");
+    }
         
-    })
     
     // test click to light mode
     await driver.findElement(By.id("light")).click();
 
 
-    // check if message is correct
-    value = driver.findElement(By.id("themeOutput")).getText();
-    value.then(function(result){
-        if (result == "You chose Light mode!"){
-            points = points + 1;
-            console.log("Light Mode selection : message is correct");
-            console.log(points);
-        }
-        else{
-            console.log("Check message when light mode selected");
-        }
-    })
+   // obtain the value displayed on the right side
+   message = await driver.findElement(By.id("themeOutput")).getText();
+    
+   // check if text has the word 'Dark'
+   if ((message != initial) && (message.includes("Light"))){
+       points = points + 1;
+       console.log("Dark Mode selection : message is correct");
+       console.log(points);
+   }
+   else{
+       console.log("Check message when dark mode selected");
+   }
+   
+   // test display colour when changing to light mode
+   displayColour = await driver.findElement(By.id("right")).getCssValue("background-color");
 
-    // test display colour when changing to light mode
-    displayColour = driver.findElement(By.id("right")).getCssValue("background-color");
-    displayColour.then(function(result){
-        if (result == "rgba(248, 249, 250, 1)"){
-            points = points + 1;
-            console.log("Light Mode selection : colour is correct");
-            console.log(points);
-        }
-        else{
-            console.log("Check colour when light mode selected");
-        }
-        
-    })
+   if (displayColour == "rgba(248, 249, 250, 1)"){
+        points = points + 1;
+        console.log("Light Mode selection : colour is correct");
+        console.log(points);
+    }
+    else{
+        console.log("Check colour when light mode selected");
+    }
     
 }
 
