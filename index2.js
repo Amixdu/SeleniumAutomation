@@ -20,22 +20,29 @@ driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
 async function testBirthday(){
 
     // test click
+
+    // get text before click
+    let initial = driver.findElement(By.id("ageOutput")).getText();
+
+    // clicking birthday
     await driver.findElement(By.id("date")).click();
 
     // check if correct
-    let value = driver.findElement(By.id("ageOutput")).getText();
-    value.then(function(result){
-        if (result == "Lemme guess, your age is..."){
-            // console.log(result);
-            points = points + 1;
-            console.log("Age click prompt : correct")
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check prompt when age box is clicked")
-        }
-    })
+
+    // obtain the value displayed on the right side
+    let prompt = await driver.findElement(By.id("ageOutput")).getText();
+
+
+    // check if text has been changed due to click
+    if (prompt != initial){
+        console.log("Age click prompt : correct")
+        points = points + 1;
+        console.log(points);
+        // printPoints(points);
+    }
+    else{
+        console.log("Check prompt when age box is clicked")
+    }
 
 
 
@@ -46,22 +53,20 @@ async function testBirthday(){
     // blur
     driver.findElement(By.id("right")).click();
 
-    // check if correct
-    value = driver.findElement(By.id("ageOutput")).getText();
-    value.then(function(result){
-        if (result == "Would you mind entering your birthday?"){
-            console.log("Request age when input is empty : correct")
-            points = points + 1;
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check request when date box is empty")
-        }
-    })
+    // get text on input box
+    let reqPrompt = await driver.findElement(By.id("ageOutput")).getText();
 
 
-    
+    // check if blurring triggers a new message on text box
+    if ((reqPrompt != initial) && (reqPrompt != prompt)){
+        console.log("Request age when input is empty : correct")
+        points = points + 1;
+        console.log(points);
+    }
+    else{
+        console.log("Check request when date box is empty")
+    }
+
 
     // test enter and unfocus
     // type birthday
@@ -71,25 +76,27 @@ async function testBirthday(){
     // blur
     driver.findElement(By.id("right")).click();
 
-    // check if correct
-    value = driver.findElement(By.id("ageOutput")).getText();
-    value.then(function(result){
-        if (result == "Your age is 20 years old!"){
-            // console.log(result);
-            console.log("Age display : correct")
-            points = points + 1;
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check age display")
-        }
-    })
+    // obtain the age display message (the output message)
+    let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
+
+    // check if correct age is displayed (the age should be 20 for entered date)
+    if (nameOutput.includes("20")){
+        console.log("Age display : correct")
+        points = points + 1;
+        console.log(points);
+    }
+    else{
+        console.log("Check age display")
+    }
+
 }
 
 
 async function testName(){
     // test click
+
+    // get text before click
+    let initial = driver.findElement(By.id("nameOutput")).getText();
 
     // clicking name
     await driver.findElement(By.id("name")).click();
@@ -97,20 +104,19 @@ async function testName(){
     // check if correct
 
     // obtain the value displayed on the right side
-    let value = driver.findElement(By.id("nameOutput")).getText();
-    value.then(function(result){
-        if (result == "Hello there! What is your name?"){
-            console.log("Name click prompt : correct")
-            points = points + 1;
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check name prompt")
-        }
-    })
-
-
+    let prompt = await driver.findElement(By.id("nameOutput")).getText();
+   
+    // check if text has been changed due to click
+    if (prompt != initial){
+        console.log("Name click prompt : correct")
+        points = points + 1;
+        console.log(points);
+        // printPoints(points);
+    }
+    else{
+        console.log("Check name prompt")
+    }
+    
 
     // test no input and unfocus
     // click name box
@@ -119,67 +125,66 @@ async function testName(){
     // blur
     driver.findElement(By.id("right")).click();
 
-    // check if correct
-    value = driver.findElement(By.id("nameOutput")).getText();
-    value.then(function(result){
-        if (result == "Would you mind entering your name?"){
-            // console.log(result);
-            console.log("Ask for name when input is empty : correct")
-            points = points + 1;
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check name request message for empty input")
-        }
-    })
+    // get text on input box
+    let reqPrompt = await driver.findElement(By.id("nameOutput")).getText();
 
+    // check if blurring triggers a new message on text box
+    if ((reqPrompt != initial) && (reqPrompt != prompt)){
+        console.log("Ask for name when input is empty : correct")
+        points = points + 1;
+        console.log(points);
+    }
+    else{
+        console.log("Check name request message for empty input")
+    }
 
-    
 
     // test input and unfocus
-    // type birthday
-    let birthdayBox =  driver.findElement(By.id("name"));
-    birthdayBox.sendKeys("TestName");
+    // type name
+    let nameBox =  driver.findElement(By.id("name"));
+    nameBox.sendKeys("TestName");
 
     // blur
     driver.findElement(By.id("right")).click();
 
-    // check if correct
-    value = driver.findElement(By.id("nameOutput")).getText();
-    value.then(function(result){
-        if (result == "Hi, TestName!"){
-            console.log("Name display : correct")
-            points = points + 1;
-            console.log(points);
-            // printPoints(points);
-        }
-        else{
-            console.log("Check name display")
-        }
-    })
+    // obtain the greeting message (the output message)
+    let nameOutput = await driver.findElement(By.id("nameOutput")).getText();
+
+    // check if output message includes the entered name ('TestName' was entered to the input so the same name should be included in greeting)
+    if (nameOutput.includes("TestName")){
+        console.log("Name display : correct")
+        points = points + 1;
+        console.log(points);
+    }
+    else{
+        console.log("Check name display")
+    }
+
 }
 
 
 async function testTheme(){
 
+    // get text before click
+    let initial = driver.findElement(By.id("skillsOutput")).getText();
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
 
+    // obtain the value displayed on the right side
+    let message = await driver.findElement(By.id("skillsOutput")).getText();
     
-    // check if message is correct
-    let value = driver.findElement(By.id("themeOutput")).getText();
-    value.then(function(result){
-        if (result == "You chose Dark mode!"){
-            points = points + 1;
-            console.log("Dark Mode selection : message is correct");
-            console.log(points);
-        }
-        else{
-            console.log("Check message when dark mode selected");
-        }
-    })
+    // check if text has the word 'Dark'
+    if ((message != initial) && (message.includes("Dark"))){
+        points = points + 1;
+        console.log("Dark Mode selection : message is correct");
+        console.log(points);
+    }
+    else{
+        console.log("Check message when dark mode selected");
+        console.log(message)
+    }
+    
 
 
     // test display colour when changing to dark mode
@@ -453,19 +458,11 @@ async function testSkills(){
 
 
 
-
-function later(delay) {
-    return new Promise(function(resolve) {
-        setTimeout(resolve, delay);
-    });
-}
-
 async function main(){
     await testBirthday();
     await testName();
     await testTheme();
     testSkills();
-    // await later(10);
     // console.log("final: " + points);
 }
 
