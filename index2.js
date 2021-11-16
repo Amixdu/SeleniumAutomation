@@ -4,19 +4,20 @@ const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const webdriver = require('selenium-webdriver');
 var points = 0;
 
+
+// to remove cluttering
+const chromeOptions = new ChromeOptions();
+chromeOptions.excludeSwitches('enable-logging');
+
+// open html
+let driver = new webdriver.Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(chromeOptions)
+    .build();
+
+driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
+
 async function testBirthday(){
-
-    // to remove cluttering
-    const chromeOptions = new ChromeOptions();
-    chromeOptions.excludeSwitches('enable-logging');
-
-    // open html
-    let driver = await new webdriver.Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(chromeOptions)
-        .build();
-
-    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
 
     // test click
     await driver.findElement(By.id("date")).click();
@@ -88,19 +89,6 @@ async function testBirthday(){
 
 
 async function testName(){
-
-    // to remove cluttering
-    const chromeOptions = new ChromeOptions();
-    chromeOptions.excludeSwitches('enable-logging');
-
-    // open html
-    let driver = await new webdriver.Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(chromeOptions)
-        .build();
-
-    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
-
     // test click
     await driver.findElement(By.id("name")).click();
 
@@ -171,17 +159,6 @@ async function testName(){
 
 async function testTheme(){
 
-    // to remove cluttering
-    const chromeOptions = new ChromeOptions();
-    chromeOptions.excludeSwitches('enable-logging');
-
-    // open html
-    let driver = await new webdriver.Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(chromeOptions)
-        .build();
-    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
-
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
@@ -249,18 +226,6 @@ async function testTheme(){
 }
 
 async function hover(id){
-    // to remove cluttering
-    const chromeOptions = new ChromeOptions();
-    chromeOptions.excludeSwitches('enable-logging');
-
-    // open html
-    let driver = await new webdriver.Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(chromeOptions)
-        .build();
-    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
-
-    // testing hover
 
     // pre
     let preHover = await driver.findElement(By.id(id)).getCssValue("background-color");
@@ -296,16 +261,6 @@ async function hover(id){
 
 
 async function testSkills(){
-    // to remove cluttering
-    const chromeOptions = new ChromeOptions();
-    chromeOptions.excludeSwitches('enable-logging');
-
-    // open html
-    let driver = await new webdriver.Builder()
-        .forBrowser("chrome")
-        .setChromeOptions(chromeOptions)
-        .build();
-    await driver.get("D:\\Projects\\Selenium\\\Test_Chrome\\index.html");
 
     // testing hover
     if (hover("html") && hover("css") && hover("javascript")){
