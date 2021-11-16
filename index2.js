@@ -284,6 +284,55 @@ async function getLeftSkills(){
     return leftSkillsArray;
 }
 
+
+async function move(id, leftCount, rightCount){
+    let button = await driver.findElement(By.id(id));
+
+    // click button
+    await button.click();
+
+    // get skills on both sides
+    let right = await getRightSkills();
+    let left = await getLeftSkills();
+
+    // checking if button moved to right side
+    let foundRight = false;
+    for (let i = 0; i < right.length; i ++){
+        let res = (await right[i].getText()).toLowerCase();
+        if (res.includes(id)){
+            foundRight = true;
+        }
+    }
+
+    if (foundRight == false){
+        console.log(id + " button not moved to right side")
+    }
+
+    // checking if button removed from left side
+    let foundLeft = false;
+    for (let i = 0; i < left.length; i ++){
+        let res = await left[i].getText();
+        if (res.includes(id)){
+            foundLeft = true;
+        }
+    }
+
+    if (foundLeft){
+        console.log(id + " button not removed from left side")
+    }
+
+    let valid = false;
+    if (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false){
+        valid = true;
+        return true
+    }
+    else{
+        return false
+    }
+}
+
+
+
 async function testMove(){
     // let right = await driver.findElement(By.id("right"));
     // let left = await driver.findElement(By.id("left"));
@@ -457,7 +506,7 @@ async function testSkills(){
     }
 
     // testing moving
-    if (await testMove()){
+    if ((await move("html", 3, 1)) && (await move("javascript", 2, 2)) && (await move("css", 1, 3))){
         points = points + 1;
         console.log("Button moving : correct");
         console.log(points)
