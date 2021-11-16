@@ -449,9 +449,6 @@ async function testSkills(){
         console.log("Button moving : correct");
         console.log(points)
     }
-    else{
-        console.log("Check button moving");
-    }
 }
 
 
