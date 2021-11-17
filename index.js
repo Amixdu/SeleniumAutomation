@@ -1,3 +1,6 @@
+// ADD FILE LOCATION OF THE FILE TO BE TESTED BELOW
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+
 const {Builder, Key, By} = require("selenium-webdriver");
 
 const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
@@ -15,7 +18,7 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get("D:\\Projects\\Selenium\\Test_Chrome\\index.html");
+driver.get(FILE_PATH);
 
 
 /**
