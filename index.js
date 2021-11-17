@@ -1,5 +1,5 @@
 // ADD FILE LOCATION OF THE FILE TO BE TESTED BELOW
-const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
 
 const {Builder, Key, By} = require("selenium-webdriver");
 
@@ -202,6 +202,7 @@ async function testTheme(){
     let theme =  await driver.findElement(By.id("themeOutput"));
     let parent = await theme.findElement(By.xpath("./.."));
     let initialColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
+    let initialTextColour = await parent.findElement(By.xpath("./..")).getCssValue("color");
 
     // test click to dark mode
     await driver.findElement(By.id("dark")).click();
@@ -211,6 +212,7 @@ async function testTheme(){
 
     // get colour after the click
     let displayColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
+    let displayTextColour = await parent.findElement(By.xpath("./..")).getCssValue("color");
     
     // check if text has the word 'Dark'
     if ((message != initial) && (message.includes("Dark"))){
@@ -220,12 +222,20 @@ async function testTheme(){
         errorLog.push("Message indicating that dark mode was selected is not displayed properly");
     }
     
-    // test display colour when changing to dark mode
+    // test display background colour when changing to dark mode
     if (displayColour != initialColour){
         points = points + 1;
     }
     else{
         errorLog.push("Background colour doesnt change when dark mode selected");
+    }
+
+    // test display text colour when changing to dark mode
+    if (displayTextColour != initialTextColour){
+        points = points + 1;
+    }
+    else{
+        errorLog.push("Text colour doesnt change when dark mode selected");
     }
         
     // LIGHT MODE
@@ -237,6 +247,7 @@ async function testTheme(){
     theme =  await driver.findElement(By.id("themeOutput"));
     parent = await theme.findElement(By.xpath("./.."));
     initialColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
+    initialTextColour = await parent.findElement(By.xpath("./..")).getCssValue("color");
 
     // click light mode button
     await driver.findElement(By.id("light")).click();
@@ -247,6 +258,7 @@ async function testTheme(){
 
     // get colour after the click
     displayColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
+    displayTextColour = await parent.findElement(By.xpath("./..")).getCssValue("color");
         
     // check if text has the word 'Light'
     if ((message != initial) && (message.includes("Light"))){
@@ -256,8 +268,7 @@ async function testTheme(){
         errorLog.push("Message indicating that light mode was selected is not displayed properly");
     }
    
-    // test display colour when changing to light mode
-    displayColour = await driver.findElement(By.id("nameOutput")).getCssValue("background-color");
+    // test display background colour when changing to light mode
 
     if (displayColour != initialColour){
         points = points + 1;
@@ -266,6 +277,13 @@ async function testTheme(){
         errorLog.push("Background colour doesnt change when light mode selected");
     }
     
+    // test display text colour when changing to dark mode
+    if (displayTextColour != initialTextColour){
+        points = points + 1;
+    }
+    else{
+        errorLog.push("Text colour doesnt change when light mode selected");
+    }
 }
 
 
