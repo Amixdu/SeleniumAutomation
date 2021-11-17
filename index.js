@@ -363,16 +363,7 @@ async function moveRight(id, leftCount, rightCount, handle){
         console.log(id + " button not removed from left side")
     }
 
-    let valid = false;
-    if (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false){
-        valid = true;
-        return true
-    }
-    else{
-        console.log(left.length)
-        console.log(right.length)
-        return false
-    }
+    return (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false);
 }
 
 
@@ -411,16 +402,7 @@ async function moveLeft(button, id, leftCount, rightCount, handle){
         console.log(id + " button not removed from right side")
     }
 
-    let valid = false;
-    if (left.length == leftCount && right.length == rightCount && foundLeft && foundRight == false){
-        valid = true;
-        return true
-    }
-    else{
-        console.log(left.length)
-        console.log(right.length)
-        return false
-    }
+    return (left.length == leftCount && right.length == rightCount && foundLeft && foundRight == false);
 }
 
 
@@ -500,7 +482,6 @@ async function testSkills(){
     else{
         console.log("Problem in moving buttons from right to left");
     }
-
 
 }
 
