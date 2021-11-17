@@ -1,11 +1,12 @@
 // ADD FILE LOCATION OF THE FILE TO BE TESTED BELOW
-const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
 
 const {Builder, Key, By} = require("selenium-webdriver");
 
 const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const webdriver = require('selenium-webdriver');
 var points = 0;
+var errorLog = [];
 
 
 // to remove cluttering
@@ -53,12 +54,10 @@ async function testBirthday(){
 
     // check if text has been changed due to click
     if (prompt != initial){
-        console.log("Age click prompt : correct")
         points = points + 1;
-        console.log(points);
     }
     else{
-        console.log("Check prompt when age box is clicked")
+        errorLog.push("Initial prompt is not displayed when age box clicked (onfocus event)");
     }
 
     // click birthday box
@@ -70,12 +69,10 @@ async function testBirthday(){
 
     // check if blurring triggers a new message on text box
     if ((reqPrompt != initial) && (reqPrompt != prompt)){
-        console.log("Request age when input is empty : correct")
         points = points + 1;
-        console.log(points);
     }
     else{
-        console.log("Check request when date box is empty")
+        errorLog.push("The request prompt when user places cursor outside the date box (onblur event) while its empty is not displayed");
     }
 
 
@@ -121,12 +118,10 @@ async function testBirthday(){
     
 
     if (stat){
-        console.log("Age display : correct")
         points = points + 1;
-        console.log(points);
     }
     else {
-        console.log("Check age display")
+        errorLog.push("Age is not displayed correctly");
     }
 }
 
@@ -146,14 +141,12 @@ async function testName(){
     let prompt = await driver.findElement(By.id("nameOutput")).getText();
    
     // check if text has been changed due to click
-    if (prompt != initial){
-        console.log("Name click prompt : correct")
+    if (prompt != initial){  
         points = points + 1;
-        console.log(points);
         // printPoints(points);
     }
     else{
-        console.log("Check name prompt")
+        errorLog.push("Initial prompt when name box is clicked (onfocus event) is not displayed");
     }
     
 
@@ -169,12 +162,10 @@ async function testName(){
 
     // check if blurring triggers a new message on text box
     if ((reqPrompt != initial) && (reqPrompt != prompt)){
-        console.log("Ask for name when input is empty : correct")
         points = points + 1;
-        console.log(points);
     }
     else{
-        console.log("Check name request message for empty input")
+        errorLog.push("The request prompt when user places cursor outside the name box (onblur event) while its empty is not displayed");
     }
     
 
@@ -191,12 +182,10 @@ async function testName(){
 
     // check if output message includes the entered name ('TestName' was entered to the input so the same name should be included in greeting)
     if (nameOutput.includes("TestName")){
-        console.log("Name display : correct")
         points = points + 1;
-        console.log(points);
     }
     else{
-        console.log("Check name display")
+        errorLog.push("Greeting with name not displayed correctly");
     }
 
 }
@@ -226,21 +215,17 @@ async function testTheme(){
     // check if text has the word 'Dark'
     if ((message != initial) && (message.includes("Dark"))){
         points = points + 1;
-        console.log("Dark Mode selection : message is correct");
-        console.log(points);
     }
     else{
-        console.log("Check message when dark mode selected");
+        errorLog.push("Message indicating that dark mode was selected is not displayed properly");
     }
     
     // test display colour when changing to dark mode
     if (displayColour != initialColour){
         points = points + 1;
-        console.log("Dark Mode selection : colour is correct");
-        console.log(points);
     }
     else{
-        console.log("Check colour when dark mode selected");
+        errorLog.push("Background colour doesnt change when dark mode selected");
     }
         
     // LIGHT MODE
@@ -266,11 +251,9 @@ async function testTheme(){
     // check if text has the word 'Light'
     if ((message != initial) && (message.includes("Light"))){
         points = points + 1;
-        console.log("Dark Mode selection : message is correct");
-        console.log(points);
     }
     else{
-        console.log("Check message when dark mode selected");
+        errorLog.push("Message indicating that light mode was selected is not displayed properly");
     }
    
     // test display colour when changing to light mode
@@ -278,18 +261,16 @@ async function testTheme(){
 
     if (displayColour != initialColour){
         points = points + 1;
-        console.log("Light Mode selection : colour is correct");
-        console.log(points);
     }
     else{
-        console.log("Check colour when light mode selected");
+        errorLog.push("Background colour doesnt change when light mode selected");
     }
     
 }
 
 
 // await driver.findElement(By.id(id))
-async function hover(button){
+async function hover(button, side){
 
     // pre hover colour
     let preHover = await button.getCssValue("background-color");
@@ -315,6 +296,9 @@ async function hover(button){
     // colour should be same as initial colour when mouse moved away
     if (preHover == postHoverTwo && postHover != preHover){
         return true
+    }
+    else{
+        errorLog.push("The colour of " + await button.getText() + " button is not changed on mouse hover when the button is on the " + side);
     }
 }
 
@@ -350,7 +334,7 @@ async function moveRight(id, leftCount, rightCount, handle){
     }
 
     if (foundRight == false){
-        console.log(id + " button not moved to right side")
+        errorLog.push(id + " button not moved to right side");
     }
 
     // checking if button removed from left side
@@ -363,7 +347,7 @@ async function moveRight(id, leftCount, rightCount, handle){
     }
 
     if (foundLeft){
-        console.log(id + " button not removed from left side")
+        errorLog.push(id + " button not removed from left side");
     }
 
     return (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false);
@@ -389,7 +373,7 @@ async function moveLeft(button, id, leftCount, rightCount, handle){
     }
 
     if (foundLeft == false){
-        console.log(id + " button not moved to left side")
+        errorLog.push(id + " button not moved to left side");
     }
 
     // checking if button removed from right side
@@ -402,7 +386,7 @@ async function moveLeft(button, id, leftCount, rightCount, handle){
     }
 
     if (foundRight){
-        console.log(id + " button not removed from right side")
+        errorLog.push(id + " button not removed from right side");
     }
 
     return (left.length == leftCount && right.length == rightCount && foundLeft && foundRight == false);
@@ -412,24 +396,23 @@ async function moveLeft(button, id, leftCount, rightCount, handle){
 
 async function testSkills(){
 
+    let left = "left";
+    let right = "right;"
+
     // testing hover
     let htmlButton = await driver.findElement(By.id("html"));
-    let htmlCorrect = await hover(htmlButton);
+    let htmlCorrect = await hover(htmlButton, left);
 
     let cssButton = await driver.findElement(By.id("css"));
-    let cssCorect = await hover(cssButton);
+    let cssCorect = await hover(cssButton, left);
 
     let jsButton = await driver.findElement(By.id("javascript"));
-    let jsCorrect = await hover(jsButton);
+    let jsCorrect = await hover(jsButton, left);
 
     if (htmlCorrect && cssCorect && jsCorrect){
         points = points + 1;
-        console.log("Colour change on skill buttons hover : correct")
-        console.log(points);
     }
-    else{
-        console.log("Check colour changes on skill button hover")
-    }
+    
 
     // testing moving to right from left
 
@@ -438,11 +421,6 @@ async function testSkills(){
     let parent = await element.findElement(By.xpath("./.."));
     if ((await moveRight("html", 3, 1, parent)) && (await moveRight("javascript", 2, 2, parent)) && (await moveRight("css", 1, 3, parent))){
         points = points + 1;
-        console.log("Button moving to right : correct");
-        console.log(points)
-    }
-    else{
-        console.log("Problem in moving buttons from left to right")
     }
 
 
@@ -451,18 +429,13 @@ async function testSkills(){
     // testing hover on right side
     let allHoverCorrect = true;
     for (let i = 0; i < skillsOnRight.length; i++){
-        if (await hover(skillsOnRight[i]) == false){
+        if (await hover(skillsOnRight[i], right) == false){
             allHoverCorrect = false;
         }
     }
 
     if (allHoverCorrect){
         points = points + 1;
-        console.log("Colour change on skill buttons hover on right side: correct")
-        console.log(points);
-    }
-    else{
-        console.log("Check colour changes on skill button hover on right side")
     }
 
 
@@ -479,11 +452,6 @@ async function testSkills(){
 
     if (allCorrect){
         points = points + 1;
-        console.log("Button moving to left : correct");
-        console.log(points)
-    }
-    else{
-        console.log("Problem in moving buttons from right to left");
     }
 
 }
@@ -493,8 +461,22 @@ async function main(){
     await testBirthday();
     await testName();
     await testTheme();
-    testSkills();
-    // console.log("final: " + points);
+    await testSkills();
+    driver.quit();
+
+    if (errorLog.length == 0){
+        console.log("Final Score: " + points + " (Full Points)");
+    }
+    else{
+        console.log("\nFinal Score: " + points);
+        console.log("\nError Log: ");
+        for (let i = 0; i < errorLog.length; i++){
+            console.log(errorLog[i]);
+        }
+        console.log("\n");
+    }
+    
+    
 }
 
 
