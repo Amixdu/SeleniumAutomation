@@ -1,0 +1,39 @@
+===========================================================================================================================
+
+NAME
+Test 1 : Code that doesnt provide initial message when input clicked
+Test 2 : Code that doesnt provide req prompt when clicked away with no input
+Test 3 : Code that doesnt provide name when clicked away with input
+
+Each error above reduces one point, if all three errors present in testing code, resulting points should be 11 points.
+
+===========================================================================================================================
+
+DATE
+Test 1 : Code that doesnt provide initial message when input clicked
+Test 2 : Code that doesnt provide req prompt when clicked away with no input
+Test 3 : Code that doesnt provide correct age when clicked away with input date of birth
+
+Each error above reduces one point, if all three errors present in testing code, resulting points should be 11 points.
+
+===========================================================================================================================
+
+THEME
+Test 1 : Code that doesnt give result message when light mode button clicked
+Test 2 : Code that doesnt change colour when light mode button clicked
+Test 3 : Code that doesnt give result message when dark mode button clicked
+Test 4 : Code that doesnt change colour when when dark mode button clicked
+
+Code with all four errors present should give a result of 10 points
+
+===========================================================================================================================
+
+SKILLS
+Test 1 : Code with buttons that dont change colour on hover when in left side
+Test 2 : Code with buttons that dont move to right when in left side
+Test 3 : Code with buttons that dont change colour on hover when in right side
+Test 4 : Code with buttons that dont move to left when in right side
+
+Code with all four errors above should give a final score of 10 points
+
+===========================================================================================================================
