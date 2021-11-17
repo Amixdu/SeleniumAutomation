@@ -15,20 +15,35 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get("D:\\Projects\\Selenium\\Test_Chrome\\index2.html");
+driver.get("file:///C:/Users/Methma Wijerathna/Desktop/Methma Wijerathna/Projects/Web Projects/SeleniumAutomation/index.html");
+
+
+/**
+    * The function computes the age of the person based on the date of birth entered and the current date
+    * @param {Date of Birth of Person} dateBirth 
+    * @param {Current Date} dateNow 
+    * @returns Age of the person
+*/
+function computeAge(dateBirth, dateNow) {
+    let age = dateNow.getFullYear() - dateBirth.getFullYear();
+        
+    if (dateBirth.getMonth() > dateNow.getMonth()) {
+            age -= 1;
+    } else if (dateBirth.getMonth() === dateNow.getMonth()){
+        if (dateBirth.getDate() > dateNow.getDate()) {
+            age -= 1; 
+        }
+    }
+        return age;
+}
+
 
 async function testBirthday(){
 
-    // test click
-
     // get text before click
     let initial = driver.findElement(By.id("ageOutput")).getText();
-
     // clicking birthday
     await driver.findElement(By.id("date")).click();
-
-    // check if correct
-
     // obtain the value displayed on the right side
     let prompt = await driver.findElement(By.id("ageOutput")).getText();
 
@@ -38,24 +53,17 @@ async function testBirthday(){
         console.log("Age click prompt : correct")
         points = points + 1;
         console.log(points);
-        // printPoints(points);
     }
     else{
         console.log("Check prompt when age box is clicked")
     }
 
-
-
-    // test no input and unfocus
     // click birthday box
     driver.findElement(By.id("date")).click();
-
     // blur
     driver.findElement(By.css("body")).click();
-
     // get text on input box
     let reqPrompt = await driver.findElement(By.id("ageOutput")).getText();
-
 
     // check if blurring triggers a new message on text box
     if ((reqPrompt != initial) && (reqPrompt != prompt)){
@@ -67,28 +75,24 @@ async function testBirthday(){
         console.log("Check request when date box is empty")
     }
 
-
-    // test enter and unfocus
     // type birthday
     let birthdayBox =  driver.findElement(By.id("date"));
     birthdayBox.sendKeys("08142001");
-
+    let correctAge = computeAge(new Date(2001, 08, 14), new Date());
     // blur
     driver.findElement(By.css("body")).click();
-
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
 
     // check if correct age is displayed (the age should be 20 for entered date)
-    if (nameOutput.includes("20")){
+    if (nameOutput.includes(correctAge)){
         console.log("Age display : correct")
         points = points + 1;
         console.log(points);
     }
-    else{
+    else {
         console.log("Check age display")
     }
-
 }
 
 
@@ -137,7 +141,7 @@ async function testName(){
     else{
         console.log("Check name request message for empty input")
     }
-
+    
 
     // test input and unfocus
     // type name
