@@ -15,7 +15,7 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get("file:///C:/Users/Methma Wijerathna/Desktop/Methma Wijerathna/Projects/Web Projects/SeleniumAutomation/index.html");
+driver.get("D:\\Projects\\Selenium\\Test_Chrome\\index.html");
 
 
 /**
@@ -75,16 +75,39 @@ async function testBirthday(){
         console.log("Check request when date box is empty")
     }
 
-    // type birthday
+
+    // type birthday (the testing date is 20 years ago of the current day + 1)
+    // If today is November 17th 2021, the DOB entered for testing is November 18th 2001
+    // Which should result in an age of 19 years old (since the person would be 20 only on the 18th)
+    let today = new Date(Date.now() + (3600 * 1000 * 24));
+    let year = today.getFullYear() - 20;
+    let month = today.getMonth() + 1;
+    let day = today.getDate()
+
+    let yearStr = year.toString();
+    let monthStr = month.toString();
+    let dayStr = day.toString();
+    
+    let testDate = monthStr + dayStr + yearStr;
+
+    // sending the test date to the date input box
     let birthdayBox =  driver.findElement(By.id("date"));
-    birthdayBox.sendKeys("08142001");
-    let correctAge = computeAge(new Date(2001, 08, 14), new Date());
+    birthdayBox.sendKeys(testDate);
+
+    // calculaating the correct age
+    let correctAge = computeAge(new Date(year, month, day), new Date());
+
+
     // blur
     driver.findElement(By.css("body")).click();
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
 
     var ageGotten = nameOutput.match(/(\d+)/);
+
+    
+    // compare correct age with displayed age
+
     var stat = false;
 
     for (let i = 0; i < ageGotten.length; i++) {
@@ -92,8 +115,8 @@ async function testBirthday(){
             stat = true
         }
     }
+    
 
-    // check if correct age is displayed (the age should be 20 for entered date)
     if (stat){
         console.log("Age display : correct")
         points = points + 1;
