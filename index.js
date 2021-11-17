@@ -442,8 +442,8 @@ async function testSkills(){
 
 
     // testing moving to left from right
-    let leftC = 1;
-    let rightC = 3;
+    let leftC = (await getLeftSkills(parent)).length;
+    let rightC = (await getRightSkills()).length;
     let allCorrect = true;
     for (let i = 0; i < skillsOnRight.length; i++){
         let buttonName = (await skillsOnRight[i].getText()).toLowerCase();
