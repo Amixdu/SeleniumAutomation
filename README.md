@@ -1,5 +1,7 @@
 # SeleniumAutomation
 
+## Scoring System <br/>
+
 Testing Name:<br/>
 1 point for displaying prompt when input box clicked<br/>
 1 point for displaying a request prompt when user clicks away when input box is empty<br/>
