@@ -84,8 +84,17 @@ async function testBirthday(){
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
 
+    var ageGotten = nameOutput.match(/(\d+)/);
+    var stat = false;
+
+    for (let i = 0; i < ageGotten.length; i++) {
+        if (stat == false && ageGotten[i] == correctAge) {
+            stat = true
+        }
+    }
+
     // check if correct age is displayed (the age should be 20 for entered date)
-    if (nameOutput.includes(correctAge)){
+    if (stat){
         console.log("Age display : correct")
         points = points + 1;
         console.log(points);
