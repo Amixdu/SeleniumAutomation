@@ -14,9 +14,11 @@ Testing Birthday:<br/>
 
 Testing Theme:<br/>
 1 point for displaying message when dark mode selected<br/>
-1 point for changing colour when dark mode selected<br/>
+1 point for changing background colour when dark mode selected<br/>
+1 point for changing text colour when dark mode selected<br/>
 1 point for displaying message when light mode selected<br/>
 1 point for changing colour when light mode selected<br/>
+1 point for changing text colour when light mode selected<br/>
 
 Testing Skills:<br/>
 1 point for correctly changing button colour on mouse hover (for all three buttons)<br/>
@@ -24,7 +26,7 @@ Testing Skills:<br/>
 1 point for correctly changing button colour on mouse hover from the right side (for all three buttons)<br/>
 1 point for correctly moving buttons back to left on click (for all three buttons)<br/>
 
-Full points : 14
+Full points : 16
 
 ## Setup instructions <br/>
 Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver<br/>
