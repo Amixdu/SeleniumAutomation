@@ -22,4 +22,4 @@ Testing Skills:<br/>
 1 point for correctly changing button colour on mouse hover from the right side(for all three buttons)<br/>
 1 point for correctly moving buttons back to left on click (for all three buttons)<br/>
 
-Full points
+Full points : 14
