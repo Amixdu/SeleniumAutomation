@@ -15,20 +15,35 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get("D:\\Projects\\Selenium\\Test_Chrome\\index2.html");
+driver.get("D:\\Projects\\Selenium\\Test_Chrome\\index.html");
+
+
+/**
+    * The function computes the age of the person based on the date of birth entered and the current date
+    * @param {Date of Birth of Person} dateBirth 
+    * @param {Current Date} dateNow 
+    * @returns Age of the person
+*/
+function computeAge(dateBirth, dateNow) {
+    let age = dateNow.getFullYear() - dateBirth.getFullYear();
+        
+    if (dateBirth.getMonth() > dateNow.getMonth()) {
+            age -= 1;
+    } else if (dateBirth.getMonth() === dateNow.getMonth()){
+        if (dateBirth.getDate() > dateNow.getDate()) {
+            age -= 1; 
+        }
+    }
+        return age;
+}
+
 
 async function testBirthday(){
 
-    // test click
-
     // get text before click
     let initial = driver.findElement(By.id("ageOutput")).getText();
-
     // clicking birthday
     await driver.findElement(By.id("date")).click();
-
-    // check if correct
-
     // obtain the value displayed on the right side
     let prompt = await driver.findElement(By.id("ageOutput")).getText();
 
@@ -38,24 +53,17 @@ async function testBirthday(){
         console.log("Age click prompt : correct")
         points = points + 1;
         console.log(points);
-        // printPoints(points);
     }
     else{
         console.log("Check prompt when age box is clicked")
     }
 
-
-
-    // test no input and unfocus
     // click birthday box
     driver.findElement(By.id("date")).click();
-
     // blur
     driver.findElement(By.css("body")).click();
-
     // get text on input box
     let reqPrompt = await driver.findElement(By.id("ageOutput")).getText();
-
 
     // check if blurring triggers a new message on text box
     if ((reqPrompt != initial) && (reqPrompt != prompt)){
@@ -67,11 +75,26 @@ async function testBirthday(){
         console.log("Check request when date box is empty")
     }
 
+    // type birthday (the testing date is 20 years ago of the current day + 1)
+    // If today is November 17th 2021, the DOB entered for testing is November 18th 2001
+    // Which should result in an age of 19 years old (since the person would be 20 only on the 18th)
+    let today = new Date(Date.now() + (3600 * 1000 * 24));
+    let year = today.getFullYear() - 20;
+    let month = today.getMonth() + 1;
+    let day = today.getDate()
 
-    // test enter and unfocus
-    // type birthday
+    let yearStr = year.toString();
+    let monthStr = month.toString();
+    let dayStr = day.toString();
+    
+    let testDate = monthStr + dayStr + yearStr;
+
+    // sending the test date to the date input box
     let birthdayBox =  driver.findElement(By.id("date"));
-    birthdayBox.sendKeys("08142001");
+    birthdayBox.sendKeys(testDate);
+
+    // calculaating the correct age
+    let correctAge = computeAge(new Date(year, month, day), new Date());
 
     // blur
     driver.findElement(By.css("body")).click();
@@ -79,16 +102,26 @@ async function testBirthday(){
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
 
-    // check if correct age is displayed (the age should be 20 for entered date)
-    if (nameOutput.includes("20")){
+    var ageGotten = nameOutput.match(/(\d+)/);
+    
+    // compare correct age with displayed age
+    var stat = false;
+
+    for (let i = 0; i < ageGotten.length; i++) {
+        if (stat == false && ageGotten[i] == correctAge) {
+            stat = true
+        }
+    }
+
+    
+    if (stat){
         console.log("Age display : correct")
         points = points + 1;
         console.log(points);
     }
-    else{
+    else {
         console.log("Check age display")
     }
-
 }
 
 
@@ -137,7 +170,7 @@ async function testName(){
     else{
         console.log("Check name request message for empty input")
     }
-
+    
 
     // test input and unfocus
     // type name
