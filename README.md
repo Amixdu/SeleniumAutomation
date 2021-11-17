@@ -25,3 +25,12 @@ Testing Skills:<br/>
 1 point for correctly moving buttons back to left on click (for all three buttons)<br/>
 
 Full points : 14
+
+## Setup instructions <br/>
+Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver<br/>
+Install Node.js<br/>
+Install selenium webdriver using "npm install –save selenium-webdriver"<br/>
+Specify input file location
+Run node index in terminal
+
+
