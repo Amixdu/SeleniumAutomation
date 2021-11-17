@@ -1,5 +1,5 @@
 // ADD FILE LOCATION OF THE FILE TO BE TESTED BELOW
-const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
 
 const {Builder, Key, By} = require("selenium-webdriver");
 
@@ -419,7 +419,9 @@ async function testSkills(){
     // obtain left side buttons handle using html button and use this handle for tracking all three buttons on the left
     let element = await driver.findElement(By.id("html"));
     let parent = await element.findElement(By.xpath("./.."));
-    if ((await moveRight("html", 3, 1, parent)) && (await moveRight("javascript", 2, 2, parent)) && (await moveRight("css", 1, 3, parent))){
+    let nLeftElems = (await getLeftSkills(parent)).length;
+    let nRightElems = (await getRightSkills()).length;
+    if ((await moveRight("html", nLeftElems - 1, nRightElems + 1, parent)) && (await moveRight("javascript", nLeftElems - 2, nRightElems + 2, parent)) && (await moveRight("css", nLeftElems - 3, nRightElems + 3, parent))){
         points = points + 1;
     }
 
