@@ -75,6 +75,7 @@ async function testBirthday(){
         console.log("Check request when date box is empty")
     }
 
+
     // type birthday (the testing date is 20 years ago of the current day + 1)
     // If today is November 17th 2021, the DOB entered for testing is November 18th 2001
     // Which should result in an age of 19 years old (since the person would be 20 only on the 18th)
@@ -96,15 +97,17 @@ async function testBirthday(){
     // calculaating the correct age
     let correctAge = computeAge(new Date(year, month, day), new Date());
 
+
     // blur
     driver.findElement(By.css("body")).click();
-
     // obtain the age display message (the output message)
     let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
 
     var ageGotten = nameOutput.match(/(\d+)/);
+
     
     // compare correct age with displayed age
+
     var stat = false;
 
     for (let i = 0; i < ageGotten.length; i++) {
@@ -112,8 +115,8 @@ async function testBirthday(){
             stat = true
         }
     }
-
     
+
     if (stat){
         console.log("Age display : correct")
         points = points + 1;
