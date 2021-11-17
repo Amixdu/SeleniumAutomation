@@ -252,26 +252,28 @@ async function testTheme(){
     
 }
 
-async function hover(id){
+
+// await driver.findElement(By.id(id))
+async function hover(button){
 
     // pre hover colour
-    let preHover = await driver.findElement(By.id(id)).getCssValue("background-color");
+    let preHover = await button.getCssValue("background-color");
 
     // move mouse over button
-    let html = driver.findElement(By.id(id));
+    // let html = driver.findElement(By.id(id));
     const actions = driver.actions({ bridge: true });
-    actions.move({duration: 100, origin: html}).perform();
+    await actions.move({duration: 200, origin: button}).perform();
 
     // get colour while mouse is hovering
-    let postHover = await driver.findElement(By.id(id)).getCssValue("background-color");
+    let postHover = await button.getCssValue("background-color");
 
     // move mouse away
     // let right = driver.findElement(By.id("nameOutput"));
     // actions.move({duration: 100, origin: right}).perform();
-    driver.findElement(By.css("body")).click();
+    await driver.findElement(By.css("body")).click();
 
     // get colour again after moving mouse
-    let postHoverTwo = await driver.findElement(By.id(id)).getCssValue("background-color");
+    let postHoverTwo = await button.getCssValue("background-color");
 
     // check if colours change correctly
     // initial colour should be different to colour when mouse is hovering
@@ -293,7 +295,7 @@ async function getLeftSkills(handle){
 }
 
 
-async function move(id, leftCount, rightCount, handle){
+async function moveRight(id, leftCount, rightCount, handle){
     let button = await driver.findElement(By.id(id));
 
     // click button
@@ -342,10 +344,68 @@ async function move(id, leftCount, rightCount, handle){
 }
 
 
+async function moveLeft(button, id, leftCount, rightCount, handle){
+
+    // click button
+    await button.click();
+
+    // get skills on both sides
+    let right = await getRightSkills();
+    let left = await getLeftSkills(handle);
+
+    // checking if button moved to right side
+    let foundLeft = false;
+    for (let i = 0; i < left.length; i ++){
+        let res = (await left[i].getText()).toLowerCase();
+        if (res.includes(id)){
+            foundLeft = true;
+        }
+    }
+
+    if (foundLeft == false){
+        console.log(id + " button not moved to left side")
+    }
+
+    // checking if button removed from right side
+    let foundRight = false;
+    for (let i = 0; i < right.length; i ++){
+        let res = await right[i].getText();
+        if (res.includes(id)){
+            foundRight = true;
+        }
+    }
+
+    if (foundRight){
+        console.log(id + " button not removed from right side")
+    }
+
+    let valid = false;
+    if (left.length == leftCount && right.length == rightCount && foundLeft && foundRight == false){
+        valid = true;
+        return true
+    }
+    else{
+        console.log(left.length)
+        console.log(right.length)
+        return false
+    }
+}
+
+
+
 async function testSkills(){
 
     // testing hover
-    if (await hover("html") && await hover("css") && await hover("javascript")){
+    let htmlButton = await driver.findElement(By.id("html"));
+    let htmlCorrect = await hover(htmlButton);
+
+    let cssButton = await driver.findElement(By.id("css"));
+    let cssCorect = await hover(cssButton);
+
+    let jsButton = await driver.findElement(By.id("javascript"));
+    let jsCorrect = await hover(jsButton);
+
+    if (htmlCorrect && cssCorect && jsCorrect){
         points = points + 1;
         console.log("Colour change on skill buttons hover : correct")
         console.log(points);
@@ -354,21 +414,63 @@ async function testSkills(){
         console.log("Check colour changes on skill button hover")
     }
 
-    // testing moving
+    // testing moving to right from left
 
     // obtain left side buttons handle using html button and use this handle for tracking all three buttons on the left
-    let element =  await driver.findElement(By.id("html"));
+    let element = await driver.findElement(By.id("html"));
     let parent = await element.findElement(By.xpath("./.."));
-    if ((await move("html", 3, 1, parent)) && (await move("javascript", 2, 2, parent)) && (await move("css", 1, 3, parent))){
+    if ((await moveRight("html", 3, 1, parent)) && (await moveRight("javascript", 2, 2, parent)) && (await moveRight("css", 1, 3, parent))){
         points = points + 1;
-        console.log("Button moving : correct");
+        console.log("Button moving to right : correct");
         console.log(points)
     }
     else{
-        console.log("Problem")
+        console.log("Problem in moving buttons from left to right")
     }
-}
 
+
+    let skillsOnRight = await getRightSkills();
+    
+    // testing hover on right side
+    let allHoverCorrect = true;
+    for (let i = 0; i < skillsOnRight.length; i++){
+        if (await hover(skillsOnRight[i]) == false){
+            allHoverCorrect = false;
+        }
+    }
+
+    if (allHoverCorrect){
+        points = points + 1;
+        console.log("Colour change on skill buttons hover on right side: correct")
+        console.log(points);
+    }
+    else{
+        console.log("Check colour changes on skill button hover on right side")
+    }
+
+
+    // testing moving to left from right
+    let leftC = 1;
+    let rightC = 3;
+    let allCorrect = true;
+    for (let i = 0; i < skillsOnRight.length; i++){
+        let buttonName = (await skillsOnRight[i].getText()).toLowerCase();
+        if (await moveLeft(skillsOnRight[i], buttonName, (leftC + (i + 1)), (rightC - (i + 1)), parent) == false){
+            allCorrect = false;
+        }
+    }
+
+    if (allCorrect){
+        points = points + 1;
+        console.log("Button moving to left : correct");
+        console.log(points)
+    }
+    else{
+        console.log("Problem in moving buttons from right to left");
+    }
+
+
+}
 
 
 async function main(){
@@ -381,3 +483,5 @@ async function main(){
 
 
 main();
+
+
