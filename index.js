@@ -105,7 +105,6 @@ async function testBirthday(){
 
     var ageGotten = nameOutput.match(/(\d+)/);
 
-    
     // compare correct age with displayed age
 
     var stat = false;
@@ -116,7 +115,6 @@ async function testBirthday(){
         }
     }
     
-
     if (stat){
         points = points + 1;
     }
@@ -124,7 +122,6 @@ async function testBirthday(){
         errorLog.push("Age is not displayed correctly");
     }
 }
-
 
 async function testName(){
     // test click
@@ -148,7 +145,6 @@ async function testName(){
     else{
         errorLog.push("Initial prompt when name box is clicked (onfocus event) is not displayed");
     }
-    
 
     // test no input and unfocus
     // click name box
@@ -168,7 +164,6 @@ async function testName(){
         errorLog.push("The request prompt when user places cursor outside the name box (onblur event) while its empty is not displayed");
     }
     
-
     // test input and unfocus
     // type name
     let nameBox =  driver.findElement(By.id("name"));
@@ -190,8 +185,6 @@ async function testName(){
 
 }
 
-
-
 async function testMode(mode){
     // get text before click
     let initial = await driver.findElement(By.id("themeOutput")).getText();
@@ -202,7 +195,7 @@ async function testMode(mode){
     let initialColour = await parent.findElement(By.xpath("./..")).getCssValue("background-color");
     let parentCopy = parent;
 
-    // this is an additional measure to obtain bakground colour, if the challenger has added extra divs to the starter index.html file,
+    // this is an additional measure to obtain background colour, if the challenger has added extra divs to the starter index.html file,
     // the loop bypasses these transparent divs, so as long as the background colour of main container div changes, the point is given
     while (initialColour == "rgba(0, 0, 0, 0)"){
         parentCopy = await parentCopy.findElement(By.xpath("./.."));
@@ -258,7 +251,6 @@ async function testTheme(){
     await testMode("light");
 }
 
-
 // await driver.findElement(By.id(id))
 async function hover(button, side){
 
@@ -303,7 +295,6 @@ async function getLeftSkills(handle){
     return leftSkillsArray;
 }
 
-
 async function moveRight(id, leftCount, rightCount, handle){
     let button = await driver.findElement(By.id(id));
 
@@ -323,8 +314,11 @@ async function moveRight(id, leftCount, rightCount, handle){
         }
     }
 
+    // if button not moved to right side, consequently points will be reduced for hovering on right side and moving back to left
     if (foundRight == false){
         errorLog.push(id + " button not moved to right side");
+        errorLog.push("The colour of " + id + " button is not changed on mouse hover when the button is on the right");
+        errorLog.push(id + " button not moved to left side");
     }
 
     // checking if button removed from left side
@@ -342,7 +336,6 @@ async function moveRight(id, leftCount, rightCount, handle){
 
     return (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false);
 }
-
 
 async function moveLeft(button, id, leftCount, rightCount, handle){
 
@@ -399,11 +392,18 @@ async function testSkills(){
     let jsButton = await driver.findElement(By.id("javascript"));
     let jsCorrect = await hover(jsButton, left);
 
-    if (htmlCorrect && cssCorect && jsCorrect){
+    if (htmlCorrect){
         points = points + 1;
-    }
+    } 
     
-
+    if (cssCorect){
+        points = points + 1;
+    } 
+    
+    if (jsCorrect){
+        points = points + 1;
+    } 
+    
     // testing moving to right from left
 
     // obtain left side buttons handle using html button and use this handle for tracking all three buttons on the left
@@ -411,25 +411,35 @@ async function testSkills(){
     let parent = await element.findElement(By.xpath("./.."));
     let nLeftElems = (await getLeftSkills(parent)).length;
     let nRightElems = (await getRightSkills()).length;
-    if ((await moveRight("html", nLeftElems - 1, nRightElems + 1, parent)) && (await moveRight("javascript", nLeftElems - 2, nRightElems + 2, parent)) && (await moveRight("css", nLeftElems - 3, nRightElems + 3, parent))){
+    let moved = 1;
+    if (await moveRight("html", nLeftElems - moved, nRightElems + moved, parent)){
         points = points + 1;
+        moved = moved + 1;
     }
-
-
+   
+    if (await moveRight("javascript", nLeftElems - moved, nRightElems + moved, parent)){
+        points = points + 1;
+        moved = moved + 1;
+    }
+    
+    if (await moveRight("css", nLeftElems - moved, nRightElems + moved, parent)){
+        points = points + 1;
+        moved = moved + 1;
+    }
+    
     let skillsOnRight = await getRightSkills();
     
     // testing hover on right side
     let allHoverCorrect = true;
+    // console.log(skillsOnRight.length)
     for (let i = 0; i < skillsOnRight.length; i++){
         if (await hover(skillsOnRight[i], right) == false){
             allHoverCorrect = false;
         }
+        else{
+            points = points + 1;
+        }
     }
-
-    if (allHoverCorrect){
-        points = points + 1;
-    }
-
 
     // testing moving to left from right
     let leftC = (await getLeftSkills(parent)).length;
@@ -440,14 +450,11 @@ async function testSkills(){
         if (await moveLeft(skillsOnRight[i], buttonName, (leftC + (i + 1)), (rightC - (i + 1)), parent) == false){
             allCorrect = false;
         }
+        else{
+            points = points + 1;
+        }
     }
-
-    if (allCorrect){
-        points = points + 1;
-    }
-
 }
-
 
 async function main(){
     await testBirthday();
@@ -457,10 +464,10 @@ async function main(){
     driver.quit();
 
     if (errorLog.length == 0){
-        console.log("Final Score: " + points + " (Full Points)");
+        console.log("Final Score: " + points + "/24 (Full Points)");
     }
     else{
-        console.log("\nFinal Score: " + points);
+        console.log("\nFinal Score: " + points + "/24");
         console.log("\nError Log: ");
         for (let i = 0; i < errorLog.length; i++){
             console.log(errorLog[i]);
@@ -470,7 +477,4 @@ async function main(){
     
 }
 
-
 main();
-
-
