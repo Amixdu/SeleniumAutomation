@@ -101,9 +101,9 @@ async function testBirthday(){
     // blur
     driver.findElement(By.css("body")).click();
     // obtain the age display message (the output message)
-    let nameOutput = await driver.findElement(By.id("ageOutput")).getText();
+    let ageOutput = await driver.findElement(By.id("ageOutput")).getText();
 
-    var ageGotten = nameOutput.match(/(\d+)/);
+    var ageGotten = ageOutput.match(/(\d+)/);
 
     // compare correct age with displayed age
 
@@ -140,7 +140,6 @@ async function testName(){
     // check if text has been changed due to click
     if (prompt != initial){  
         points = points + 1;
-        // printPoints(points);
     }
     else{
         errorLog.push("Initial prompt when name box is clicked (onfocus event) is not displayed");
@@ -430,7 +429,6 @@ async function testSkills(){
     let skillsOnRight = await getRightSkills();
     
     // testing hover on right side
-    let allHoverCorrect = true;
     // console.log(skillsOnRight.length)
     for (let i = 0; i < skillsOnRight.length; i++){
         if (await hover(skillsOnRight[i], right) == false){
@@ -456,25 +454,53 @@ async function testSkills(){
     }
 }
 
-async function main(){
-    await testBirthday();
-    await testName();
-    await testTheme();
-    await testSkills();
-    driver.quit();
+// function to ensure that the id's of the provided starter code html is unchanged (These ids are used by selenium driver to locate elements)
+async function validateFile(){
+    try{
+        await driver.findElement(By.id("html"));
+        await driver.findElement(By.id("css"));
+        await driver.findElement(By.id("javascript"));
+        await driver.findElement(By.id("name"));
+        await driver.findElement(By.id("date"));
+        await driver.findElement(By.id("light"));
+        await driver.findElement(By.id("dark"));
+        await driver.findElement(By.id("nameOutput"));
+        await driver.findElement(By.id("ageOutput"));
+        await driver.findElement(By.id("themeOutput"));
+        await driver.findElement(By.id("skillsOutput"));
+        return true;
+    }
+    catch{
+        return false;
+    }
+}
 
-    if (errorLog.length == 0){
-        console.log("Final Score: " + points + "/24 (Full Points)");
+async function main(){
+    if (await validateFile() == true){
+        await testBirthday();
+        await testName();
+        await testTheme();
+        await testSkills();
+        driver.quit();
+
+        if (errorLog.length == 0){
+            console.log("Final Score: " + points + "/24 (Full Points)");
+        }
+        else{
+            console.log("\nFinal Score: " + points + "/24");
+            console.log("\nError Log: ");
+            for (let i = 0; i < errorLog.length; i++){
+                console.log(errorLog[i]);
+            }
+            console.log("\n");
+        }
     }
     else{
-        console.log("\nFinal Score: " + points + "/24");
-        console.log("\nError Log: ");
-        for (let i = 0; i < errorLog.length; i++){
-            console.log(errorLog[i]);
-        }
-        console.log("\n");
+        driver.quit();
+        console.log("\nAn Id of an element in the original starter HTML code file has been removed or changed\n");
     }
-    
 }
 
 main();
+
+
