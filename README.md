@@ -34,7 +34,7 @@ Full points : 24
 1. Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver and add its path to environment variables<br/>
 2. Install Node.js<br/>
 3. Download repo and open with code editor (VS code etc.)<br/>
-4. Install selenium webdriver into the same downloaded folder using "npm install –save selenium-webdriver"<br/>
+4. Install selenium webdriver into the same downloaded folder using "npm install selenium-webdriver"<br/>
 5. Specify the location of input file that needs to be tested <br/>
 6. Run "node index" in terminal
 
