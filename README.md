@@ -20,7 +20,7 @@ Testing Theme:<br/>
 1 point for changing colour when light mode selected<br/>
 1 point for changing text colour when light mode selected<br/>
 
-Testing Skills (Testing done for each button seperately):<br/>
+Testing Skills (done for each button seperately, therefore points for skills is 4 x 3 = 12):<br/>
 1 point for correctly changing button colour on mouse hover<br/>
 1 point for correctly moving buttons to right side on click<br/>
 1 point for correctly changing button colour on mouse hover from the right side<br/>
