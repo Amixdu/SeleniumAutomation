@@ -20,13 +20,15 @@ Testing Theme:<br/>
 1 point for changing colour when light mode selected<br/>
 1 point for changing text colour when light mode selected<br/>
 
-Testing Skills:<br/>
-1 point for correctly changing button colour on mouse hover (for all three buttons)<br/>
-1 point for correctly moving buttons to right side on click (for all three buttons)<br/>
-1 point for correctly changing button colour on mouse hover from the right side (for all three buttons)<br/>
-1 point for correctly moving buttons back to left on click (for all three buttons)<br/>
+Testing Skills (Testing done for each button seperately):<br/>
+1 point for correctly changing button colour on mouse hover<br/>
+1 point for correctly moving buttons to right side on click<br/>
+1 point for correctly changing button colour on mouse hover from the right side<br/>
+1 point for correctly moving buttons back to left on click<br/>
 
-Full points : 16
+
+
+Full points : 24
 
 ## Setup instructions <br/>
 Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver<br/>
