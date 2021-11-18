@@ -2,17 +2,17 @@
 
 ## Scoring System <br/>
 
-Testing Name:<br/>
+Testing Name (3 points):<br/>
 1 point for displaying prompt when input box clicked<br/>
 1 point for displaying a request prompt when user clicks away when input box is empty<br/>
 1 point for displaying greeting with name when user clicks away when input box is non-empty<br/>
 
-Testing Birthday:<br/>
+Testing Birthday (3 points):<br/>
 1 point for displaying prompt when input box clicked<br/>
 1 point for displaying a request prompt when user clicks away when input box is empty<br/>
 1 point for displaying correct age when user clicks away when input box is non-empty<br/>
 
-Testing Theme:<br/>
+Testing Theme (6 points):<br/>
 1 point for displaying message when dark mode selected<br/>
 1 point for changing background colour when dark mode selected<br/>
 1 point for changing text colour when dark mode selected<br/>
