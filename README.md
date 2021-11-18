@@ -31,11 +31,12 @@ Testing Skills (done for each button seperately, therefore points for skills is 
 Full points : 24
 
 ## Setup instructions <br/>
-Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver<br/>
+Download chrome webdriver from https://www.npmjs.com/package/selenium-webdriver and add its path to environment variables<br/>
 Install Node.js<br/>
-Install selenium webdriver using "npm install –save selenium-webdriver"<br/>
+Download repo and open with code editor (VS code)<br/>
+Install selenium webdriver into the same downloaded folder using "npm install –save selenium-webdriver"<br/>
 Specify the location of input file that needs to be tested <br/>
-Run node index in terminal
+Run "node index" in terminal
 
 
 
