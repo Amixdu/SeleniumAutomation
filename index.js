@@ -1,7 +1,8 @@
 // ENTER FILE LOCATION OF THE FILE TO BE TESTED BELOW:
-const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+const FILE_PATH2 = "file:///C:/Users/Methma Wijerathna/Desktop/Methma Wijerathna/Projects/Web Projects/SeleniumAutomation/index.html";
 
-const {Builder, Key, By} = require("selenium-webdriver");
+const {Builder, Key, By, until} = require("selenium-webdriver");
 
 const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const webdriver = require('selenium-webdriver');
@@ -303,6 +304,10 @@ async function hover(button, side){
     // move mouse away
     await driver.findElement(By.css("body")).click();
 
+    // time buffer to ensure colour change has completed before getting post hover colour
+    let away = await driver.findElement(By.id("themeOutput"));
+    await actions.move({duration: 200, origin: away}).perform();
+
     // get colour again after moving mouse
     let postHover = await button.getCssValue("background-color");
 
@@ -317,6 +322,7 @@ async function hover(button, side){
     }
 }
 
+  
 
 /**
     * This function obtains the current skill buttons present on the right side div
