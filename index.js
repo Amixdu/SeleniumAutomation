@@ -9,7 +9,7 @@ var points = 0;
 var errorLog = [];
 
 
-// to remove cluttering
+// to remove log cluttering
 const chromeOptions = new ChromeOptions();
 chromeOptions.excludeSwitches('enable-logging');
 
@@ -42,6 +42,14 @@ function computeAge(dateBirth, dateNow) {
 }
 
 
+/**
+    * This function ensures that the features ascociated with the age section 
+    * of the challenge works properly.
+    * Features tested: 
+    * 1. displaying prompt when input box clicked
+    * 2. displaying a request prompt when user clicks away when input box is empty
+    * 3. displaying correct age when user clicks away when input box is non-empty
+*/
 async function testBirthday(){
 
     // get text before click
@@ -122,6 +130,14 @@ async function testBirthday(){
     }
 }
 
+/**
+    * This function ensures that the features ascociated with the name section 
+    * of the challenge works properly.
+    * Features tested: 
+    * 1. displaying prompt when input box clicked
+    * 2. displaying a request prompt when user clicks away when input box is empty
+    * 3. displaying a greeting with name when user clicks away when input box is non-empty
+*/
 async function testName(){
     // test click
 
@@ -183,6 +199,16 @@ async function testName(){
 
 }
 
+
+/**
+    * This function ensures that the features ascociated with the theme section 
+    * of the challenge works properly for a given mode.
+    * Features tested: 
+    * 1. displaying message when dark mode selected
+    * 2. changing background colour when dark mode selected
+    * 3. changing text colour when dark mode selected
+    * @param {The Id of the mode button ('dark' or 'light')} mode 
+*/
 async function testMode(mode){
     // get text before click
     let initial = await driver.findElement(By.id("themeOutput")).getText();
@@ -244,11 +270,24 @@ async function testMode(mode){
     }
 }
 
+
+/**
+    * This function ensures that the features ascociated with the theme section 
+    * of the challenge works properly for both modes.
+*/
 async function testTheme(){
     await testMode("dark");
     await testMode("light");
 }
 
+
+/**
+    * This function ensures that the colour change of the button when 
+    * hovering over the provided skill button is correct.
+    * @param {The html element that represents the button to be tested} button 
+    * @param {A string representing left or right side} side 
+    * @returns A boolean value indicating if test passed for the provided button
+*/
 async function hover(button, side){
 
     // pre hover colour
@@ -278,17 +317,36 @@ async function hover(button, side){
     }
 }
 
+
+/**
+    * This function obtains the current skill buttons present on the right side div
+    * @returns An array of button elements
+*/
 async function getRightSkills(){
     let skills = await driver.findElement(By.id('skillsOutput'));
     let skillsArray = await skills.findElements(By.xpath(".//*"));
     return skillsArray;
 }
 
+/**
+    * This function obtains the current skill buttons present on the left side div
+    * @returns An array of button elements
+*/
 async function getLeftSkills(handle){
     let leftSkillsArray = await handle.findElements(By.xpath(".//*"));
     return leftSkillsArray;
 }
 
+
+/**
+    * This function checks if the movement of skill buttons from left to right
+    * when clicked works correctly.
+    * @param {The id of the button to be moved} id 
+    * @param {Number of elements that should remain on the left after moving} leftCount 
+    * @param {Number of elements that should remain on the right after moving} rightCount 
+    * @param {Html element that is used to obtain the element count} handle 
+    * @returns A boolean value indicating if the provided button was successfully moved
+*/
 async function moveRight(id, leftCount, rightCount, handle){
     let button = await driver.findElement(By.id(id));
 
@@ -331,6 +389,17 @@ async function moveRight(id, leftCount, rightCount, handle){
     return (left.length == leftCount && right.length == rightCount && foundRight && foundLeft == false);
 }
 
+
+/**
+    * This function checks if the movement of skill buttons from right to left
+    * when clicked works correctly.
+    * @param {The button element to be moved} button 
+    * @param {The id of the button to be moved} id 
+    * @param {Number of elements that should remain on the left after moving} leftCount 
+    * @param {Number of elements that should remain on the right after moving} rightCount 
+    * @param {Html element that is used to obtain the element count} handle 
+    * @returns A boolean value indicating if the provided button was successfully moved
+*/
 async function moveLeft(button, id, leftCount, rightCount, handle){
 
     // click button
@@ -371,6 +440,15 @@ async function moveLeft(button, id, leftCount, rightCount, handle){
 
 
 
+/**
+    * This function ensures that the features ascociated with the skills section 
+    * of the challenge works properly.
+    * Features tested (done seperately for each button): 
+    * 1. changing button colour on mouse hover
+    * 2. moving buttons to right side on click
+    * 3. changing button colour on mouse hover from the right side
+    * 4. moving buttons back to left on click
+*/
 async function testSkills(){
 
     let left = "left";
@@ -399,7 +477,6 @@ async function testSkills(){
     } 
     
     // testing moving to right from left
-
     // obtain left side buttons handle using html button and use this handle for tracking all three buttons on the left
     let element = await driver.findElement(By.id("html"));
     let parent = await element.findElement(By.xpath("./.."));
@@ -424,12 +501,8 @@ async function testSkills(){
     let skillsOnRight = await getRightSkills();
     
     // testing hover on right side
-    // console.log(skillsOnRight.length)
     for (let i = 0; i < skillsOnRight.length; i++){
-        if (await hover(skillsOnRight[i], right) == false){
-            allHoverCorrect = false;
-        }
-        else{
+        if (await hover(skillsOnRight[i], right)){
             points = points + 1;
         }
     }
@@ -437,19 +510,20 @@ async function testSkills(){
     // testing moving to left from right
     let leftC = (await getLeftSkills(parent)).length;
     let rightC = (await getRightSkills()).length;
-    let allCorrect = true;
     for (let i = 0; i < skillsOnRight.length; i++){
         let buttonName = (await skillsOnRight[i].getText()).toLowerCase();
-        if (await moveLeft(skillsOnRight[i], buttonName, (leftC + (i + 1)), (rightC - (i + 1)), parent) == false){
-            allCorrect = false;
-        }
-        else{
+        if (await moveLeft(skillsOnRight[i], buttonName, (leftC + (i + 1)), (rightC - (i + 1)), parent)){
             points = points + 1;
         }
     }
 }
 
-// function to ensure that the id's of the provided starter code html is unchanged (These ids are used by selenium driver to locate elements)
+
+/**
+    * function to ensure that the id's of the provided starter code html is unchanged 
+    * (These ids are used by selenium driver to locate elements)
+    * @returns A boolean value indicating whether the provided input file is valid for automated testing
+*/
 async function validateFile(){
     try{
         await driver.findElement(By.id("html"));
@@ -470,6 +544,10 @@ async function validateFile(){
     }
 }
 
+
+/**
+    * This is the main function that invokes the validation function and the testing functions
+*/
 async function main(){
     if (await validateFile() == true){
         await testBirthday();
@@ -497,5 +575,4 @@ async function main(){
 }
 
 main();
-
 
