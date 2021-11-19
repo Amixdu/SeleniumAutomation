@@ -1,5 +1,5 @@
 // ENTER FILE LOCATION OF THE FILE TO BE TESTED BELOW:
-const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
 
 const {Builder, Key, By} = require("selenium-webdriver");
 
@@ -96,7 +96,6 @@ async function testBirthday(){
 
     // calculaating the correct age
     let correctAge = computeAge(new Date(year, month, day), new Date());
-
 
     // blur
     driver.findElement(By.css("body")).click();
@@ -250,32 +249,28 @@ async function testTheme(){
     await testMode("light");
 }
 
-// await driver.findElement(By.id(id))
 async function hover(button, side){
 
     // pre hover colour
     let preHover = await button.getCssValue("background-color");
 
     // move mouse over button
-    // let html = driver.findElement(By.id(id));
     const actions = driver.actions({ bridge: true });
     await actions.move({duration: 200, origin: button}).perform();
 
     // get colour while mouse is hovering
-    let postHover = await button.getCssValue("background-color");
+    let duringHover = await button.getCssValue("background-color");
 
     // move mouse away
-    // let right = driver.findElement(By.id("nameOutput"));
-    // actions.move({duration: 100, origin: right}).perform();
     await driver.findElement(By.css("body")).click();
 
     // get colour again after moving mouse
-    let postHoverTwo = await button.getCssValue("background-color");
+    let postHover = await button.getCssValue("background-color");
 
     // check if colours change correctly
     // initial colour should be different to colour when mouse is hovering
     // colour should be same as initial colour when mouse moved away
-    if (preHover == postHoverTwo && postHover != preHover){
+    if (preHover == postHover && duringHover != preHover){
         return true
     }
     else{
