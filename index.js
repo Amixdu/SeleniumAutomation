@@ -304,7 +304,8 @@ async function hover(button, side){
     // move mouse away
     await driver.findElement(By.css("body")).click();
 
-    // sleep(1000);
+    // time buffer to ensure colour change has completed before getting post hover colour
+
     let away = await driver.findElement(By.id("themeOutput"));
     await actions.move({duration: 200, origin: away}).perform();
 
@@ -322,6 +323,7 @@ async function hover(button, side){
     }
 }
 
+  
 
 /**
  * Function that is used to pause code execution
