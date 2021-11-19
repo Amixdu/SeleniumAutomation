@@ -1,256 +1,220 @@
-// for unobtrusive js
-document.addEventListener("DOMContentLoaded", function(event) {
-    // handling name events
-    var name = document.getElementById("name")
-    name.addEventListener("focus", greetWithName)
-    name.addEventListener("blur", namePrompt)
-
-    // handling date events
-    var date = document.getElementById("date")
-    date.addEventListener("focus", ageGuess)
-    date.addEventListener("blur", agePrompt)
-
-    // handling theme change
-    var light = document.getElementById("light")
-    light.addEventListener("click", lightMode)
+window.onload = function(){
     
-    var dark = document.getElementById("dark")
-    dark.addEventListener("click", darkMode)
+    // Input Boxes Initialisation
+    let name = document.querySelector('#name');
+    let date = document.querySelector('#date');
+    let light = document.querySelector("#light");
+    let dark = document.querySelector("#dark");
+    let backGround = document.querySelector("#themeOutput").parentNode.parentNode;
+    let html = document.querySelector('#html');
+    let css = document.querySelector("#css");
+    let javascript = document.querySelector("#javascript");
+    let skills = document.querySelector("#html").parentNode;
 
-    // handling HTML events
-    const htmlButton = document.getElementById("html")
-    htmlButton.addEventListener("click", moveHTML)
-    htmlButton.addEventListener("mouseover", function(){
-        changeColour(htmlButton)
-    })
-    htmlButton.addEventListener("mouseout", function(){
-        changeColourBack(htmlButton)
-    })
-
-    // handling CSS events
-    const cssButton = document.getElementById("css")
-    cssButton.addEventListener("click", moveCSS)
-    cssButton.addEventListener("mouseover", function(){
-        changeColour(cssButton)
-    })
-    cssButton.addEventListener("mouseout", function(){
-        changeColourBack(cssButton)
-    })
-
-    // handling JavaScript events
-    const jsButton = document.getElementById("javascript")
-    jsButton.addEventListener("click", moveJS)
-    jsButton.addEventListener("mouseover", function(){
-        changeColour(jsButton)
-    })
-    jsButton.addEventListener("mouseout", function(){
-        changeColourBack(jsButton)
-    })
-})
-
-
-
-// display a greeting with/without name
-function greetWithName(){
-    const name = document.getElementById("name")
-    if (name.value == ""){
-        document.getElementById("nameOutput").innerHTML = "Hello there! What is your name?"
-    }
+    // Output Boxes Initialisation
+    let nameOutput = document.querySelector('#nameOutput');
+    let ageOutput = document.querySelector('#ageOutput');
+    let themeOutput =  document.querySelector("#themeOutput");
+    let skillsOutput = document.querySelector("#skillsOutput");
     
-}
-
-function namePrompt(){
-    const name = document.getElementById("name")
-    if (name.value == ""){
-        document.getElementById("nameOutput").innerHTML = "Would you mind entering your name?"
-    }
-    else{
-        nameOutput()
-    }
-}
-
-function nameOutput(){
-    const nameOutput = document.getElementById("nameOutput")
-    const name = document.getElementById("name")
-    document.getElementById("nameOutput").innerHTML = "Hi, " + name.value + "!"
-
-}
-
-// age guess message when on focus
-function ageGuess(){
-    const date = document.getElementById("date")
-    if (date.value == ""){
-        document.getElementById("ageOutput").innerHTML = "Lemme guess, your age is..."
-    }
+    // Setting Initial Values
+    name.value = "";
+    date.value = "";
+    backGround.classList.remove("bg-dark", "text-white"); // Initially light mode
+    backGround.classList.add("bg-light", "text-black");
+    light.checked = true;
+    dark.checked = false;
     
-}
 
-// age prompt message when blurred
-function agePrompt(){
-    const date = document.getElementById("date")
-    if (date.value == ""){
-        document.getElementById("ageOutput").innerHTML = "Would you mind entering your birthday?"
+
+    // ######################################
+    //          Name Functionality
+    // ######################################
+
+    // Detect change on name field
+    name.onblur = nameBlur;
+    name.onfocus = nameFocus;
+
+    /**
+     * The function is activated when the user moves the cursor away from name input box.
+     */
+    function nameBlur() {
+        nameOutput.innerHTML = "Focus has been lost";
+        let nameEntered = name.value;
+        if (nameEntered === "") {
+            nameOutput.innerHTML = "Hello there! Please enter your name?";
+        } else {
+            nameOutput.innerHTML = "Hi, " + nameEntered  + "!";
+        }
     }
-    // if value is there, invoke ageOutput() function
-    else{
-        ageOutput()
+
+     /**
+     * The function is activated when the user moves the cursor to the name input box and focuses on it.
+     */
+    function nameFocus() {
+        if (name.value === '') {
+            nameOutput.innerHTML = "Hello there! What's your name?";
+        }
     }
-}
-
-// calculate and display age
-function ageOutput(){
-    const dateOutput = document.getElementById("ageOutput")
-    const date = document.getElementById("date").value
-    // new date object from users DOB
-    const dateString = date.toString()
-    const birthday = new Date(dateString)
-    // number of milliseconds elapsed since January 1, 1970 00:00:00 UTC
-    const millisecondsToday = Date.now()
-    // creating a new date from the difference in milliseconds
-    const diff = millisecondsToday - birthday.getTime()
-    const ageFromDiff = new Date(diff)
-    // since the milliseconds for new date is counted from 1970, subtract 1970 to get age
-    dateOutput.innerHTML = "Your age is " + (ageFromDiff.getUTCFullYear() - 1970) + " years old!"
-}
 
 
 
-// change to dark mode
-function darkMode(){
-    const right = document.getElementById("right")
-    const theme = document.getElementById("themeOutput")
-    right.classList.remove("bg-light")
-    right.classList.remove("text-dark")
-    right.classList.add("bg-dark")
-    right.classList.add("text-white")
-    theme.innerHTML = "You chose Dark mode!"
-}
+    // ######################################
+    //          Age Functionality
+    // ######################################
+ 
+    // Detect change on date field
+    date.onblur = dateBlur;
+    date.onfocus = dateFocus;
 
-// change to light mode
-function lightMode(){
-    const right = document.getElementById("right")
-    const theme = document.getElementById("themeOutput")
-    right.classList.remove("bg-dark")
-    right.classList.remove("text-white")
-    right.classList.add("bg-light")
-    right.classList.add("text-dark")
-    theme.innerHTML = "You chose Light mode!"
-}
-
-// move HTML button
-function moveHTML(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "HTML"
-    button.id = "htmlNew"
-    button.setAttribute("onClick", "moveHTMLBack()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('htmlNew'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('htmlNew'))")
-    button.style.marginRight = "2.5px"
-    document.getElementById("skillsOutput").appendChild(button)
-    // removing from left
-    document.getElementById("html").remove()
-}
-
-// move CSS button
-function moveCSS(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "CSS"
-    button.id = "cssNew"
-    button.setAttribute("onClick", "moveCSSBack()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('cssNew'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('cssNew'))")
-    button.style.marginRight = "2.5px"
-    document.getElementById("skillsOutput").appendChild(button)
-    // removing from left
-    document.getElementById("css").remove()
-}
-
-// move JavaScript button
-function moveJS(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "JavaScript"
-    button.id = "jsNew"
-    button.setAttribute("onClick", "moveJSBack()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('jsNew'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('jsNew'))")
-    button.style.marginRight = "2.5px"
-    document.getElementById("skillsOutput").appendChild(button)
-    // removing from left
-    document.getElementById("javascript").remove()
-}
-
-// move HTML button back
-function moveHTMLBack(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "HTML"
-    button.id = "html"
-    button.setAttribute("onClick", "moveHTML()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('html'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('html'))")
-    button.style.marginRight = "2.5px"
-    button.style.marginLeft = "2.5px"
-    document.getElementById("skills").after(button)
-    // removing from right
-    document.getElementById("htmlNew").remove()
-}
-
-// move CSS button back
-function moveCSSBack(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "CSS"
-    button.id = "css"
-    button.setAttribute("onClick", "moveCSS()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('css'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('css'))")
-    button.style.marginRight = "2.5px"
-    button.style.marginLeft = "2.5px"
-    // if HTML button exists, move the button after it
-    try{
-        document.getElementById("html").after(button)
-    }
-    catch{
-        document.getElementById("skills").after(button)
-    }
+    /**
+     * The function is activated when the user moves the cursor away from date input box.
+     */
+    function dateBlur(){
+        if (date.value === "") {
+           
+            ageOutput.innerHTML = "Would you mind entering your birthday?";
         
-    // removing from right
-    document.getElementById("cssNew").remove()
-}
-
-// move JavaScript button
-function moveJSBack(){
-    const button = document.createElement('button');
-    button.className += "btn btn-success btn-sm"
-    button.innerHTML = "JavaScript"
-    button.id = "javascript"
-    button.setAttribute("onClick", "moveJS()")
-    button.setAttribute("onmouseover", "changeColour(document.getElementById('javascript'))")
-    button.setAttribute("onmouseout", "changeColourBack(document.getElementById('javascript'))")
-    button.style.marginRight = "2.5px"
-    button.style.marginLeft = "2.5px"
-    // if CSS button exists, move the button after it
-    try{
-        document.getElementById("css").after(button)
+        } else{
+            
+            let dateBirth = new Date(date.value);
+            let dateNow = new Date();
+            let age = computeAge(dateBirth, dateNow)
+            
+           
+            if (age > 0) {
+                ageOutput.innerHTML = "Your age is " + age + " years old!"; 
+            } else {
+                ageOutput.innerHTML = "Invalid Age!";
+            }
+        
+        }
     }
-    catch{
-        document.getElementById("skills").after(button)
+
+    /**
+     * The function is activated when the user moves the cursor to the date input box and focuses on it.
+     */
+    function dateFocus(){
+        if (date.value === "") {
+            ageOutput.innerHTML = "Lemme guess, your age is...";
+        }
     }
-    // removing from right
-    document.getElementById("jsNew").remove()
-}
 
-// change button colour
-function changeColour(button){
-    button.classList.remove("btn-success")
-    button.classList.add("btn-danger")
-}
+    /**
+     * The function computes the age of the person based on the date of birth entered and the current date
+     * @param {Date of Birth of Person} dateBirth 
+     * @param {Current Date} dateNow 
+     * @returns Age of the person
+     */
+    function computeAge(dateBirth, dateNow) {
+        let age = dateNow.getFullYear() - dateBirth.getFullYear();
+        
+        if (dateBirth.getMonth() > dateNow.getMonth()) {
+            
+            age -= 1;
 
-// change it back
-function changeColourBack(button){
-    button.classList.remove("btn-danger")
-    button.classList.add("btn-success")
+        } else if (dateBirth.getMonth() === dateNow.getMonth()){
+            
+            if (dateBirth.getDate() > dateNow.getDate()) {
+                age -= 1; 
+            }
+
+        }
+        return age;
+    }
+
+
+
+    // ######################################
+    //        BackGround Functionality
+    // ######################################
+
+    // Detect change on radio button
+    light.onchange = lightMode;
+    dark.onchange = darkMode;
+
+    /**
+     * Sets the output box the light mode with grey background and black letters when activated
+     */
+    function lightMode(){
+        backGround.classList.remove("bg-dark", "text-white");
+        backGround.classList.add("bg-light", "text-black");
+        themeOutput.innerHTML = "You chose Light Mode!";
+    }        
+
+    /**
+     * Sets the output box the dark mode with black background and white letters when activated
+     */
+    function darkMode() {
+        backGround.classList.remove("bg-light", "text-black");
+        backGround.classList.add("bg-dark", "text-white");
+        themeOutput.innerHTML = "You chose Dark Mode!";
+    };
+
+
+
+    // ######################################
+    //         Button Functionality
+    // ######################################
+
+    // Trigger the skill button functionality
+    for(let skillBtn of [html, css, javascript]) {
+        
+        // Triggered if mouse is over button
+        skillBtn.onmouseover = function(){
+            buttonFocus(skillBtn)
+        };
+
+        // Triggered when mouse is moved away from button
+        skillBtn.onmouseout = function(){
+            buttonBlur(skillBtn)
+        };
+
+        // Triggered on click of button
+        skillBtn.onclick = function(){
+            buttonClick(skillBtn)
+        };
+    }
+    
+    /**
+     * The function changes colour of button if the button is in output view
+     * @param {Button which is in focus} btn 
+     */
+    function buttonFocus(btn){
+        // if (btn.parentNode === skillsOutput){
+        //     btn.classList.remove("btn-success");
+        //     btn.classList.add("btn-danger");
+        // }
+        btn.classList.remove("btn-success");
+        btn.classList.add("btn-danger");
+    }
+
+    /**
+     * The function changes colour of button to original colour when mouse is moved away if the button is in output view
+     * @param {Button which is removed from focus} btn 
+     */
+    function buttonBlur(btn){
+        // if (btn.parentNode === skillsOutput){
+        //     btn.classList.remove("btn-danger");
+        //     btn.classList.add("btn-success");
+        // }
+        btn.classList.remove("btn-danger");
+        btn.classList.add("btn-success");
+    }
+
+    /**
+     * Changes the position of button from input to output and vice versa based on the current position of button
+     * @param {Button which is clicked} btn 
+     */
+    function buttonClick(btn){
+        if (btn.parentNode === skills) {
+            skillsOutput.appendChild(btn);
+            btn.classList.add("mr-1");
+        } else if (btn.parentNode === skillsOutput) {
+            skills.appendChild(btn);
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-success");
+            btn.classList.add("mr-1");
+        }
+    }
 }
