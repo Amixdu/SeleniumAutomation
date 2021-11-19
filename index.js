@@ -20,7 +20,7 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get(FILE_PATH);
+driver.get(FILE_PATH2);
 
 
 /**
@@ -305,6 +305,7 @@ async function hover(button, side){
     await driver.findElement(By.css("body")).click();
 
     // time buffer to ensure colour change has completed before getting post hover colour
+
     let away = await driver.findElement(By.id("themeOutput"));
     await actions.move({duration: 200, origin: away}).perform();
 
@@ -320,6 +321,16 @@ async function hover(button, side){
     else{
         errorLog.push("The colour of " + await button.getText() + " button is not changed on mouse hover when the button is on the " + side);
     }
+}
+
+  
+
+/**
+ * Function that is used to pause code execution
+ * @param {THe number of milliseconds to sleep} ms 
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
   
@@ -581,4 +592,5 @@ async function main(){
 }
 
 main();
+
 
