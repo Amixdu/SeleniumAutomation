@@ -1,12 +1,11 @@
 // ENTER FILE LOCATION OF THE FILE TO BE TESTED BELOW:
-const FILE_PATH ="file:///C:/Users/Methma Wijerathna/Desktop/Methma Wijerathna/Projects/Web Projects/SeleniumAutomation/index.html";
-const FILE_PATH2 = "D:\\Projects\\Selenium\\Test_Chrome\\index2.html";
+const FILE_PATH = "D:\\Projects\\Selenium\\Test_Chrome\\index.html";
+const FILE_PATH2 = "file:///C:/Users/Methma Wijerathna/Desktop/Methma Wijerathna/Projects/Web Projects/SeleniumAutomation/index.html";
 
-const {Builder, Key, By} = require("selenium-webdriver");
+const {Builder, Key, By, until} = require("selenium-webdriver");
 
 const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const webdriver = require('selenium-webdriver');
-const { until } = require("selenium-webdriver");
 var points = 0;
 var errorLog = [];
 
@@ -21,7 +20,7 @@ let driver = new webdriver.Builder()
     .setChromeOptions(chromeOptions)
     .build();
 
-driver.get(FILE_PATH);
+driver.get(FILE_PATH2);
 
 
 /**
@@ -303,9 +302,11 @@ async function hover(button, side){
     let duringHover = await button.getCssValue("background-color");
 
     // move mouse away
-    for (let index = 0; index < 15; index++) {
-        await driver.findElement(By.css("body")).click();
-    }
+    await driver.findElement(By.css("body")).click();
+
+    // sleep(1000);
+    let away = await driver.findElement(By.id("themeOutput"));
+    await actions.move({duration: 200, origin: away}).perform();
 
     // get colour again after moving mouse
     let postHover = await button.getCssValue("background-color");
@@ -317,11 +318,20 @@ async function hover(button, side){
         return true
     }
     else{
-        console.log(preHover, duringHover, postHover)
         errorLog.push("The colour of " + await button.getText() + " button is not changed on mouse hover when the button is on the " + side);
     }
 }
 
+
+/**
+ * Function that is used to pause code execution
+ * @param {THe number of milliseconds to sleep} ms 
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+  
 
 /**
     * This function obtains the current skill buttons present on the right side div
@@ -580,4 +590,5 @@ async function main(){
 }
 
 main();
+
 
